@@ -7,7 +7,7 @@ import paginationView from './views/paginationView';
 import bookmarksView from './views/bookmarksView';
 import addRecipeView from './views/addRecipeView';
 
-import 'core-js/stable'; // Polyfilling everything else
+import 'core-js/actual'; // Polyfilling everything else
 import 'regenerator-runtime'; // Polyfilling async await
 
 // if (module.hot) {
