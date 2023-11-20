@@ -1,7 +1,4 @@
-@import 'base';
-@import 'components';
-@import 'header';
-@import 'preview';
-@import 'searchResults';
-@import 'recipe';
-@import 'upload';
+@use 'base' as *;
+@use 'components' as *;
+@use 'abstracts' as *;
+@use 'layout' as *;

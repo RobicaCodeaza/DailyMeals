@@ -1,0 +1,21 @@
+@use '../abstracts/' as *;
+.container {
+  height: calc(100dvh - 5rem);
+  background-color: $color-grey-lightest;
+  border-radius: 9px;
+  overflow: hidden;
+  // box-shadow: 0 2rem 6rem 0.5rem rgba($color-grey-dark-1, 0.2);
+
+  display: grid;
+  grid-template-rows: min-content 1fr;
+  grid-template-columns: 1fr 2fr;
+  grid-template-areas:
+    'head head'
+    'list recipe';
+
+  @media only screen and (max-width: $bp-large) {
+    max-width: 100%;
+    margin: 0;
+    border-radius: 0;
+  }
+}

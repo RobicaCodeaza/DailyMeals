@@ -1,10 +1,11 @@
+@use '../../abstracts/' as *;
 .preview {
   &__link {
     &:link,
     &:visited {
       display: flex;
       align-items: center;
-      padding: 1.5rem 3.25rem;
+      padding: 1.25rem 3.25rem;
       transition: all 0.3s;
       border-right: 1px solid #fff;
       text-decoration: none;
@@ -55,11 +56,14 @@
   }
 
   &__data {
-    display: grid;
-    width: 100%;
-    grid-template-columns: 1fr 2rem;
-    row-gap: 0.1rem;
+    display: flex;
     align-items: center;
+    width: 100%;
+    &__text {
+      display: flex;
+      flex-direction: column;
+      gap: 0.1rem;
+    }
   }
 
   &__title {
@@ -84,17 +88,14 @@
   }
 
   &__user-generated {
-    background-color: darken($color-grey-light-2, 2%);
-
     display: flex;
     align-items: center;
     justify-content: center;
     height: 2rem;
     width: 2rem;
     border-radius: 10rem;
-
-    margin-left: auto;
-    margin-right: 1.75rem;
+    margin: auto 1.75rem auto auto;
+    background-color: darken($color-grey-light-2, 2%);
 
     svg {
       height: 1.2rem;
