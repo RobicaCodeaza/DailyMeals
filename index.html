@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Dosis:wght@300;400;500;600;700&display=swap"
       rel="stylesheet"
     />
 
@@ -20,11 +20,110 @@
   </head>
 
   <body>
-    <header class="header">
-      <img src="src/img/logo.png" alt="Logo" class="header-recipesView__logo" />
-    </header>
+    <header class="header"></header>
     <div class="content">
-      <nav class="sidebar"></nav>
+      <nav class="sidebar__nav">
+        <img src="src/img/logo.png" alt="Logo" class="sidebar__nav__logo" />
+        <!-- <nav class="sidebar__nav"> -->
+        <ul class="sidebar__nav__main sidebar__nav__list">
+          <li class="sidebar__nav__list__item">
+            <button class="sidebar__nav__btn btn" id="MealsDashboardView">
+              <span class="sidebar__nav__btn__icon">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  class="w-6 h-6"
+                >
+                  <path
+                    d="M11.47 3.84a.75.75 0 011.06 0l8.69 8.69a.75.75 0 101.06-1.06l-8.689-8.69a2.25 2.25 0 00-3.182 0l-8.69 8.69a.75.75 0 001.061 1.06l8.69-8.69z"
+                  />
+                  <path
+                    d="M12 5.432l8.159 8.159c.03.03.06.058.091.086v6.198c0 1.035-.84 1.875-1.875 1.875H15a.75.75 0 01-.75-.75v-4.5a.75.75 0 00-.75-.75h-3a.75.75 0 00-.75.75V21a.75.75 0 01-.75.75H5.625a1.875 1.875 0 01-1.875-1.875v-6.198a2.29 2.29 0 00.091-.086L12 5.43z"
+                  />
+                </svg>
+              </span>
+              Dashboard
+            </button>
+          </li>
+          <li class="sidebar__nav__list__item">
+            <button class="sidebar__nav__btn btn" id="RecipesView">
+              <span class="sidebar__nav__btn__icon">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="32"
+                  height="32"
+                  fill="#000000"
+                  viewBox="0 0 256 256"
+                >
+                  <path
+                    d="M72,88V40a8,8,0,0,1,16,0V88a8,8,0,0,1-16,0ZM216,40V224a8,8,0,0,1-16,0V176H152a8,8,0,0,1-8-8,268.75,268.75,0,0,1,7.22-56.88c9.78-40.49,28.32-67.63,53.63-78.47A8,8,0,0,1,216,40ZM200,53.9c-32.17,24.57-38.47,84.42-39.7,106.1H200ZM119.89,38.69a8,8,0,1,0-15.78,2.63L112,88.63a32,32,0,0,1-64,0l7.88-47.31a8,8,0,1,0-15.78-2.63l-8,48A8.17,8.17,0,0,0,32,88a48.07,48.07,0,0,0,40,47.32V224a8,8,0,0,0,16,0V135.32A48.07,48.07,0,0,0,128,88a8.17,8.17,0,0,0-.11-1.31Z"
+                  ></path>
+                </svg>
+              </span>
+              Recipes
+            </button>
+          </li>
+          <li class="sidebar__nav__list__item">
+            <button class="sidebar__nav__btn btn" id="IngredientsView">
+              <span class="sidebar__nav__btn__icon">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  class="w-6 h-6"
+                >
+                  <path
+                    d="M2.25 2.25a.75.75 0 000 1.5h1.386c.17 0 .318.114.362.278l2.558 9.592a3.752 3.752 0 00-2.806 3.63c0 .414.336.75.75.75h15.75a.75.75 0 000-1.5H5.378A2.25 2.25 0 017.5 15h11.218a.75.75 0 00.674-.421 60.358 60.358 0 002.96-7.228.75.75 0 00-.525-.965A60.864 60.864 0 005.68 4.509l-.232-.867A1.875 1.875 0 003.636 2.25H2.25zM3.75 20.25a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zM16.5 20.25a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0z"
+                  />
+                </svg>
+              </span>
+              Ingredients
+            </button>
+          </li>
+        </ul>
+        <ul class="sidebar__nav__profile sidebar__nav__list">
+          <li class="sidebar__nav__list__item">
+            <button class="sidebar__nav__btn btn">
+              <span class="sidebar__nav__btn__icon">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  class="w-6 h-6"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M11.078 2.25c-.917 0-1.699.663-1.85 1.567L9.05 4.889c-.02.12-.115.26-.297.348a7.493 7.493 0 00-.986.57c-.166.115-.334.126-.45.083L6.3 5.508a1.875 1.875 0 00-2.282.819l-.922 1.597a1.875 1.875 0 00.432 2.385l.84.692c.095.078.17.229.154.43a7.598 7.598 0 000 1.139c.015.2-.059.352-.153.43l-.841.692a1.875 1.875 0 00-.432 2.385l.922 1.597a1.875 1.875 0 002.282.818l1.019-.382c.115-.043.283-.031.45.082.312.214.641.405.985.57.182.088.277.228.297.35l.178 1.071c.151.904.933 1.567 1.85 1.567h1.844c.916 0 1.699-.663 1.85-1.567l.178-1.072c.02-.12.114-.26.297-.349.344-.165.673-.356.985-.57.167-.114.335-.125.45-.082l1.02.382a1.875 1.875 0 002.28-.819l.923-1.597a1.875 1.875 0 00-.432-2.385l-.84-.692c-.095-.078-.17-.229-.154-.43a7.614 7.614 0 000-1.139c-.016-.2.059-.352.153-.43l.84-.692c.708-.582.891-1.59.433-2.385l-.922-1.597a1.875 1.875 0 00-2.282-.818l-1.02.382c-.114.043-.282.031-.449-.083a7.49 7.49 0 00-.985-.57c-.183-.087-.277-.227-.297-.348l-.179-1.072a1.875 1.875 0 00-1.85-1.567h-1.843zM12 15.75a3.75 3.75 0 100-7.5 3.75 3.75 0 000 7.5z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+              </span>
+              Settings
+            </button>
+          </li>
+          <li class="sidebar__nav__list__item">
+            <button class="sidebar__nav__btn btn">
+              <span class="sidebar__nav__btn__icon">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  class="w-6 h-6"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M7.5 3.75A1.5 1.5 0 006 5.25v13.5a1.5 1.5 0 001.5 1.5h6a1.5 1.5 0 001.5-1.5V15a.75.75 0 011.5 0v3.75a3 3 0 01-3 3h-6a3 3 0 01-3-3V5.25a3 3 0 013-3h6a3 3 0 013 3V9A.75.75 0 0115 9V5.25a1.5 1.5 0 00-1.5-1.5h-6zm10.72 4.72a.75.75 0 011.06 0l3 3a.75.75 0 010 1.06l-3 3a.75.75 0 11-1.06-1.06l1.72-1.72H9a.75.75 0 010-1.5h10.94l-1.72-1.72a.75.75 0 010-1.06z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+              </span>
+              Log out
+            </button>
+          </li>
+        </ul>
+        <!-- </nav> -->
+      </nav>
       <main class="current-view">
         <div class="container">
           <div class="header-recipesView">
@@ -34,7 +133,7 @@
                 class="search__field"
                 placeholder="Search over 1,000,000 recipes..."
               />
-              <button class="btn search__btn">
+              <button class="btn--recipes search__btn">
                 <svg class="search__icon">
                   <use href="src/img/icons.svg#icon-search"></use>
                 </svg>
@@ -170,7 +269,7 @@
                 </div>
                 <p>No recipes found for your query. Please try again!</p>
               </div> -->
-            <div class="recipe__header">
+            <!-- <div class="recipe__header">
               <figure class="recipe__fig">
                 <img
                   src="/src/img/test-1.webp"
@@ -272,7 +371,7 @@
                   </svg>
                 </a>
               </div>
-            </div>
+            </div> -->
           </div>
         </div>
         <div class="add-recipe-window hidden">
@@ -338,7 +437,7 @@
               />
             </div>
 
-            <button class="btn upload__btn">
+            <button class="btn--recipes upload__btn">
               <svg>
                 <use href="src/img/icons.svg#icon-upload-cloud"></use>
               </svg>

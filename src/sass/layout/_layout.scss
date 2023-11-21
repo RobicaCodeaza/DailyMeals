@@ -1,22 +1,32 @@
 @use '../abstracts/' as *;
-.header {
-  font-size: 1.4rem;
-  height: 5rem;
-  background-color: #fff;
-  border-bottom: $line;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.container {
+  height: calc(100dvh);
+  background-color: $color-grey-lightest;
+  overflow: hidden;
+  // box-shadow: 0 2rem 6rem 0.5rem rgba($color-grey-dark-1, 0.2);
+
+  display: grid;
+  grid-template-rows: min-content 1fr;
+  grid-template-columns: 1fr 2fr;
+  grid-template-areas:
+    'head head'
+    'list recipe';
+
+  @media only screen and (max-width: $bp-large) {
+    max-width: 100%;
+    margin: 0;
+    border-radius: 0;
+  }
 }
 .content {
   display: flex;
 }
-.sidebar {
+.sidebar__nav {
   flex: 0 0 12.5%;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  background-color: $color-grey-dark-1;
+  // justify-content: space-between;
+  background-color: $color-grey-light-2;
 }
 .hotel-view {
   flex: 1;

@@ -1,9 +1,8 @@
 @use '../../abstracts/' as *;
 .search-results {
-  margin: 2rem 4rem;
+  margin: 2rem 2rem 2rem 4rem;
   padding: 2rem 1.5rem;
-  border: 2px solid $color-grey-light-2;
-
+  border: 3px solid $color-grey-light-2;
   box-shadow: $shadow-light;
   border-radius: 2rem;
 

@@ -1,32 +1,50 @@
 @use '../../abstracts/' as *;
 .recipe {
-  margin: 3rem 4rem;
+  margin: 2rem 2rem 2rem 4rem;
   border-radius: 2rem;
-  border: 3px solid $color-grey-light-2;
-  box-shadow: $shadow-light;
+  box-shadow: $shadow-medium;
   overflow: hidden;
-
+  position: relative;
   display: flex;
   flex-direction: column;
+  align-items: center;
   &__header {
     display: flex;
-    margin-bottom: 2.4rem;
     background-color: $color-grey-light-2;
-    max-height: 31.5rem;
+    height: 40%;
+    width: 100%;
+    // justify-content: center;
+    // flex: 0 1 30%;
   }
 
   ///////////
   // FIGURE
   &__fig {
-    display: flex;
+    // display: flex;
     height: 100%;
     position: relative;
     width: 50%;
+
+    &::before {
+      content: '';
+      display: block;
+      height: 100%;
+      width: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      background-image: linear-gradient(
+        to right bottom,
+        $color-grad-1,
+        $color-grad-2
+      );
+      opacity: 0.3;
+    }
   }
 
   &__img {
     width: 100%;
-    display: block;
+    // display: block;
     height: 100%;
     object-fit: cover;
     // border-radius: 2rem;
@@ -34,13 +52,14 @@
 
   &__title {
     grid-column: 1 / span 2;
+    width: 100%;
     color: #fff;
     font-weight: 700;
-    font-size: 2.4rem;
+    font-size: 2.5rem;
     text-transform: uppercase;
-    // width: 50%;
-    line-height: 1.95;
+    line-height: 1.75;
     text-align: center;
+    justify-self: center;
 
     span {
       -webkit-box-decoration-break: clone;
@@ -61,10 +80,18 @@
   ///////////
   // DETAILS
   &__details {
+    // position: absolute;
+    // background-image: linear-gradient(
+    //   rgba($color-grad-1, 0.7),
+    //   rgba($color-grad-2, 0.5)
+    // );
+    height: 100%;
+    flex: 1;
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(auto-fit, min-content);
     gap: 2.5rem 2.5rem;
-    padding: 5rem 7rem;
+    padding: 3rem;
+    justify-items: center;
   }
 
   &__info {
@@ -74,7 +101,7 @@
     align-items: center;
 
     &:not(:last-child) {
-      margin-right: 4.5rem;
+      // margin-right: 4.5rem;
     }
   }
 
@@ -97,7 +124,7 @@
   }
 
   &__user-generated {
-    background-color: darken($color-grey-light-2, 2%);
+    background-color: darken($color-grey-light-2, 5%);
 
     display: flex;
     align-items: center;
@@ -119,28 +146,35 @@
   ///////////
   // COOKING
   &__cooking {
-    display: flex;
-    height: 100%;
     padding: 2rem 4rem;
+    display: flex;
+    height: 60%;
+    align-items: center;
   }
   ///////////
   // INGREDIENTS
   &__ingredients {
-    padding: 2rem 4rem;
-    font-size: 1.6rem;
-    line-height: 1.4;
-    display: flex;
-    flex-direction: column;
+    height: 100%;
+    overflow: scroll;
+    flex: 0 0 60%;
+    padding: 3rem;
+    font-size: 1.7rem;
+    line-height: 1.2;
+    // font-style: italic;
+    direction: rtl;
   }
 
   &__ingredient-list {
-    display: grid;
-    grid-template-columns: max-content;
-    font-style: itallic;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    direction: ltr;
   }
 
   &__ingredient {
     display: flex;
+    align-items: center;
   }
 
   &__icon {
@@ -162,18 +196,22 @@
   &__directions {
     // padding: 5rem 10rem;
     // padding-bottom: 5rem;
-    padding: 2rem 4rem;
-
+    padding: 3rem 1rem;
+    flex: 1;
+    align-self: center;
     display: flex;
     flex-direction: column;
     align-items: center;
+    border-radius: 2rem;
+    // box-shadow: $shadow-light;
+    border: 2px solid $color-grey-light-3;
   }
 
   &__directions-text {
     font-size: 1.7rem;
     text-align: center;
     margin-bottom: 3.5rem;
-    color: $color-grey-dark-2;
+    color: $color-grey-dark-3;
   }
 
   &__publisher {
