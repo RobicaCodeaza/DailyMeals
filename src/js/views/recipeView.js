@@ -3,13 +3,19 @@ import icons from 'url:../../img/icons.svg'; //Parcel 2
 import fracty from 'fracty';
 import View from './View';
 
-class RecipeView extends View {
+export default class RecipeView extends View {
   _parentElement = document.querySelector('.recipe');
   _errorMessage = 'We could not find the recipe.Please try again!';
   _message = '';
 
   addHandlerRender(handler) {
-    ['hashchange', 'load'].forEach(e => window.addEventListener(e, handler));
+    console.log('Entered handler Render');
+    ['hashchange', 'load'].forEach(e =>
+      window.addEventListener(e, function (e) {
+        console.log(e);
+        handler(e);
+      })
+    );
   }
   addHandlerUpdateServings(handler) {
     this._parentElement.addEventListener('click', function (e) {
@@ -142,5 +148,3 @@ class RecipeView extends View {
     `;
   }
 }
-
-export default new RecipeView();

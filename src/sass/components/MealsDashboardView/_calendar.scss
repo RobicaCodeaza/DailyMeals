@@ -1,0 +1,6 @@
+@use '../../abstracts/' as *;
+
+.calendar {
+  grid-area: calendar;
+  background-color: $color-grey-light-2;
+}

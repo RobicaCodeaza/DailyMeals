@@ -1,26 +1,10 @@
 @use '../abstracts/' as *;
-.container {
-  height: calc(100dvh);
-  background-color: $color-grey-lightest;
-  overflow: hidden;
-  // box-shadow: 0 2rem 6rem 0.5rem rgba($color-grey-dark-1, 0.2);
 
-  display: grid;
-  grid-template-rows: min-content 1fr;
-  grid-template-columns: 1fr 2fr;
-  grid-template-areas:
-    'head head'
-    'list recipe';
-
-  @media only screen and (max-width: $bp-large) {
-    max-width: 100%;
-    margin: 0;
-    border-radius: 0;
-  }
-}
 .content {
   display: flex;
+  width: 100dvw;
 }
+
 .sidebar__nav {
   flex: 0 0 12.5%;
   display: flex;
@@ -28,7 +12,48 @@
   // justify-content: space-between;
   background-color: $color-grey-light-2;
 }
-.hotel-view {
-  flex: 1;
-  background-color: #fff;
+.current-view {
+  width: 100%;
+}
+.container {
+  height: calc(100dvh);
+  background-color: $color-grey-lightest;
+  overflow: hidden;
+  // box-shadow: 0 2rem 6rem 0.5rem rgba($color-grey-dark-1, 0.2);
+
+  &--recipes {
+    display: grid;
+    grid-template-rows: min-content 1fr;
+    grid-template-columns: 1fr 2fr;
+    grid-template-areas:
+      'head head'
+      'list recipe';
+
+    @media only screen and (max-width: $bp-large) {
+      max-width: 100%;
+      margin: 0;
+      border-radius: 0;
+    }
+  }
+  &--dashboard {
+    display: grid;
+    grid-template-rows: min-content repeat(7, 1fr);
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      'head head'
+      'calendar .'
+      'add graph1'
+      'add graph1'
+      'add graph1'
+      'add graph2'
+      'add graph2'
+      'add graph2';
+  }
+}
+
+.header {
+  grid-area: head;
+  background-color: $color-grey-light-2;
+  display: flex;
+  align-items: center;
 }

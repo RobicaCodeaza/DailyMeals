@@ -1,7 +1,7 @@
 import icons from 'url:../../img/icons.svg'; //Parcel 2
 import View from './View';
 
-class PaginationView extends View {
+export default class PaginationView extends View {
   _parentElement = document.querySelector('.pagination');
 
   addHandlerClick(handler) {
@@ -73,4 +73,3 @@ class PaginationView extends View {
     return '';
   }
 }
-export default new PaginationView();

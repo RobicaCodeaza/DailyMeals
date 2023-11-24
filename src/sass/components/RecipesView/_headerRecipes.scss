@@ -1,19 +1,7 @@
 @use '../../abstracts/' as *;
-.header-recipesView {
-  grid-area: head;
-  background-color: $color-grey-light-2;
-  display: flex;
-  align-items: center;
-
-  padding: 1.5rem;
-
-  &__logo {
-    margin-left: 4rem;
-    height: 4.6rem;
-    display: block;
-  }
+.header--recipes {
+  padding: 1.5rem 3rem;
 }
-
 .search {
   background-color: #fff;
   border-radius: 1.2rem;
@@ -54,11 +42,11 @@
   }
 
   &__btn {
-    font-weight: 600;
-    font-family: inherit;
-    padding: 0.75rem;
+    // font-weight: 600;
+    // font-family: inherit;
+    // padding: 0.75rem;
     svg {
-      margin-right: 0;
+      margin-right: 1.5rem;
     }
   }
 }
