@@ -10,7 +10,6 @@ export default class SidebarView extends View {
     window.addEventListener(
       'click',
       function (e) {
-        console.log(this);
         if (e.target.closest('.buttonMenu')) {
           const btnClicked = e.target.closest('.buttonMenu');
           btnClicked.classList.add('sidebar__nav__btn--active');

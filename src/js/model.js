@@ -2,6 +2,7 @@ import { async } from 'regenerator-runtime'; // fOR PROMISE POLYFILLING
 import { API_URL, RES_PER_PAGE, KEY } from './config';
 // import { getJSON, sendJSON } from './helpers';
 import { AJAX } from './helpers';
+import * as datedreamer from 'datedreamer';
 
 export const state = {
   recipe: {},
@@ -54,7 +55,7 @@ export const loadSearchResults = async function (query) {
       return {
         id: rec.id,
         title: rec.title,
-        publisher: rec.publisher,
+        // publisher: rec.publisher,
         image: rec.image_url,
         ...(rec.key && { key: rec.key }),
       };
@@ -147,4 +148,27 @@ export const uploadRecipe = async function (newRecipe) {
   } catch (err) {
     throw err;
   }
+};
+
+export const loadCalendar = function () {
+  new datedreamer.calendarToggle({
+    element: '#calendar',
+    format: 'MM/DD/YYYY',
+    // darkMode: true,
+    theme: 'lite-purple',
+    // custom styles here
+    styles: `
+     button{
+     color:#003554,
+    
+     }
+     .datedreamer-calendar-toggle{
+      width:25rem;
+     }
+    `,
+
+    onChange: e => {
+      console.log(new Date(e.detail).getTime());
+    },
+  });
 };

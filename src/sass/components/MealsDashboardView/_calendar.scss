@@ -1,6 +1,11 @@
 @use '../../abstracts/' as *;
 
 .calendar {
-  grid-area: calendar;
-  background-color: $color-grey-light-2;
+  // grid-area: add;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .datedreamer__calendar-toggle {
+    width: 25rem;
+  }
 }

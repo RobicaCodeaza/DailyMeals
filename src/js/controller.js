@@ -156,12 +156,11 @@ const initiateRecipesView = function () {
   resultsView = new ResultsView();
 };
 
-sidebarView.render('MealsDashboardView');
-
 const controlMenu = function (view) {
   sidebarView.render(view);
 
   if (view === 'MealsDashboardView') {
+    history.pushState({}, '', 'MealsDashboardView');
     bookmarksView = null;
     recipeView = null;
     searchView = null;
@@ -170,6 +169,8 @@ const controlMenu = function (view) {
     searchView = null;
   }
   if (view === 'RecipesView') {
+    history.pushState({}, '', 'RecipesView');
+
     initiateRecipesView();
     initiateFunctionalityRecipesView();
     bookmarksView.render(model.state.bookmarks);
@@ -177,4 +178,9 @@ const controlMenu = function (view) {
 };
 sidebarView.addHandlerRender(controlMenu);
 
-console.log(document.querySelectorAll('.buttonMenu'));
+controlMenu('MealsDashboardView');
+
+const controlCalendar = function () {
+  model.loadCalendar();
+};
+controlCalendar();
