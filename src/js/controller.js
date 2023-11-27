@@ -1,24 +1,31 @@
 import * as model from './model';
 import { MODAL_CLOSE_SEC } from './config';
-import RecipeView from './views/recipeView';
-import SearchView from './views/searchView';
-import ResultsView from './views/resultsView';
-import PaginationView from './views/paginationView';
-import BookmarksView from './views/bookmarksView';
-import AddRecipeView from './views/addRecipeView';
-import SidebarView from './views/SidebarView';
-
-import 'core-js/actual'; // Polyfilling everything else
 import 'regenerator-runtime'; // Polyfilling async await
-import PaginationView from './views/paginationView';
+import 'core-js/actual'; // Polyfilling everything else
 
+// Importing RecipesViewDashboard
+
+import RecipeView from './views/RecipesView/recipeView';
+import SearchView from './views/RecipesView/searchView';
+import ResultsView from './views/RecipesView/resultsView';
+import PaginationView from './views/RecipesView/paginationView';
+import BookmarksView from './views/RecipesView/bookmarksView';
+import AddRecipeView from './views/RecipesView/addRecipeView';
 let bookmarksView;
 let recipeView;
 let searchView;
 let paginationView;
 let addRecipeView;
 let resultsView;
+
+// Importing MealsDashboardView
+import CalendarView from './views/MealsDashboardView/CalendarView';
+let calendarView;
+
+// Importing Sidebar
+import SidebarView from './views/SidebarView';
 const sidebarView = new SidebarView();
+
 // if (module.hot) {
 //   module.hot.accept();
 // }
@@ -50,6 +57,7 @@ const controlRecipes = async function (e) {
 
 const controlSearchResults = async function () {
   try {
+    console.log('Added');
     resultsView.renderSpinner();
 
     // 1. Get Search query
@@ -131,13 +139,23 @@ const controlAddRecipe = async function (newRecipe) {
     // Closing modal
     setTimeout(function () {
       addRecipeView.toggleWindow();
+      addRecipeView.render('_');
     }, MODAL_CLOSE_SEC * 1000);
   } catch (err) {
     addRecipeView.renderError(err.message);
   }
 };
 
-const initiateFunctionalityRecipesView = function () {
+const initRecipesView = function () {
+  bookmarksView = new BookmarksView();
+  recipeView = new RecipeView();
+  searchView = new SearchView();
+  paginationView = new PaginationView();
+  addRecipeView = new AddRecipeView();
+  resultsView = new ResultsView();
+};
+
+const initFncRecipesView = function () {
   bookmarksView.addHandlerRender(controlBookmarks);
   recipeView.addHandlerRender(controlRecipes);
   recipeView.addHandlerUpdateServings(controlServings);
@@ -147,40 +165,54 @@ const initiateFunctionalityRecipesView = function () {
   addRecipeView.addHandlerUpload(controlAddRecipe);
 };
 
-const initiateRecipesView = function () {
-  bookmarksView = new BookmarksView();
-  recipeView = new RecipeView();
-  searchView = new SearchView();
-  paginationView = new PaginationView();
-  addRecipeView = new AddRecipeView();
-  resultsView = new ResultsView();
+// -----------------------------
+// MealsDashboardView
+const controlCalendar = function () {
+  console.log('Entered');
+  model.loadCalendar('#calendar');
+};
+
+const initMealsDashboardView = function () {
+  calendarView = new CalendarView();
+};
+
+const initFncMealsDashboardView = function () {
+  calendarView.addHandlerRender(controlCalendar);
+};
+
+// -----------------------------
+// Sidebar functionality
+
+let recipesViewInitiate = false;
+let mealsViewInitiate = false;
+
+const resetUrl = function (view = 'MealsDashboardView') {
+  history.pushState({ view: view }, '', view);
+  const popStateEvent = new PopStateEvent('popstate', {
+    state: { view: view },
+  });
+  dispatchEvent(popStateEvent);
+};
+
+const renderBefore = function (viewClass, data = '') {
+  viewClass.render(data);
 };
 
 const controlMenu = function (view) {
   sidebarView.render(view);
 
-  if (view === 'MealsDashboardView') {
-    history.pushState({}, '', 'MealsDashboardView');
-    bookmarksView = null;
-    recipeView = null;
-    searchView = null;
-    paginationView = null;
-    addRecipeView = null;
-    searchView = null;
-  }
-  if (view === 'RecipesView') {
-    history.pushState({}, '', 'RecipesView');
-
-    initiateRecipesView();
-    initiateFunctionalityRecipesView();
-    bookmarksView.render(model.state.bookmarks);
+  if (view.includes('RecipesView')) {
+    resetUrl(view);
+    initRecipesView();
+    initFncRecipesView();
+    renderBefore(bookmarksView, model.state.bookmarks);
+  } else {
+    initMealsDashboardView();
+    initFncMealsDashboardView();
+    resetUrl();
   }
 };
+controlMenu(window.location.toString());
 sidebarView.addHandlerRender(controlMenu);
 
-controlMenu('MealsDashboardView');
-
-const controlCalendar = function () {
-  model.loadCalendar();
-};
-controlCalendar();
+//http://localhost:1234/RecipesView#680975

@@ -1,7 +1,7 @@
 // import icons from '../img/icons.svg'; //Parcel 1
-import icons from 'url:../../img/icons.svg'; //Parcel 2
+import icons from 'url:../../../img/icons.svg'; //Parcel 2
 import fracty from 'fracty';
-import View from './View';
+import View from '../View';
 
 export default class RecipeView extends View {
   _parentElement = document.querySelector('.recipe');
@@ -10,10 +10,9 @@ export default class RecipeView extends View {
 
   addHandlerRender(handler) {
     console.log('Entered handler Render');
-    ['hashchange', 'load'].forEach(e =>
+    ['hashchange', 'load', 'popstate'].forEach(e =>
       window.addEventListener(e, function (e) {
-        console.log(e);
-        handler(e);
+        handler();
       })
     );
   }
@@ -110,11 +109,11 @@ export default class RecipeView extends View {
             <use href="${icons}#icon-check"></use>
           </svg>
           <div class="recipe__quantity">${
-            ing.quantity ? fracty(ing.quantity) : ''
+            ing.amount ? fracty(ing.amount) : ing.quantity ? ing.quantity : ''
           }</div>
           <div class="recipe__description">
             <span class="recipe__unit">${ing.unit}</span>
-            ${ing.description}
+            ${ing.name ? ing.name : ing.description}
           </div>
         </li>`;
           })

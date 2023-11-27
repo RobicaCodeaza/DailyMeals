@@ -10,6 +10,7 @@ export default class SearchView {
   }
   addHandlerSearch(handler) {
     this.#parentElement.addEventListener('submit', function (e) {
+      console.log('Entered Search');
       e.preventDefault();
       handler();
     });

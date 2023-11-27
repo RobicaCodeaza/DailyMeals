@@ -1,5 +1,11 @@
 import { async } from 'regenerator-runtime'; // fOR PROMISE POLYFILLING
-import { API_URL, RES_PER_PAGE, KEY } from './config';
+import {
+  RES_PER_PAGE,
+  KEY_GET,
+  API_URL_GET,
+  API_URL_UPLOAD,
+  KEY_UPLOAD,
+} from './config';
 // import { getJSON, sendJSON } from './helpers';
 import { AJAX } from './helpers';
 import * as datedreamer from 'datedreamer';
@@ -14,26 +20,49 @@ export const state = {
   },
   bookmarks: [],
 };
-
+const reconstructIngredients = function (ingredient) {
+  return {
+    id: +ingredient.id,
+    amount: +ingredient.measures.us.amount,
+    unit: ingredient.measures.us.unitLong,
+    name: ingredient.name,
+    text: ingredient.original,
+  };
+};
 const createRecipeObject = function (data) {
-  let { recipe } = data.data;
+  let recipe;
+  if (data.data) {
+    console.log('Entered data');
+    recipe = data.data.recipe;
+  } else {
+    recipe = data;
+  }
+  console.log(recipe);
   return {
     id: recipe.id,
     title: recipe.title,
-    publisher: recipe.publisher,
-    sourceUrl: recipe.source_url,
-    image: recipe.image_url,
+    publisher: recipe.sourceName || recipe.publisher,
+    sourceUrl: recipe.sourceUrl || recipe.source_url,
+    image: recipe.image || recipe.image_url,
     servings: recipe.servings,
-    cookingTime: recipe.cooking_time,
-    ingredients: recipe.ingredients,
+    cookingTime: recipe.readyInMinutes || recipe.cooking_time,
+    ingredients:
+      recipe.ingredients ||
+      recipe.extendedIngredients?.map(ingredient =>
+        reconstructIngredients(ingredient)
+      ),
     ...(recipe.key && { key: recipe.key }),
   };
 };
 
 export const loadRecipe = async function (id) {
   try {
-    console.log(id);
-    const data = await AJAX(`${API_URL}${id}?key=${KEY}`);
+    const data = await Promise.any([
+      AJAX(
+        `${API_URL_GET}/recipes/${id}/information?apiKey=${KEY_GET}&includeNutrition=false`
+      ),
+      AJAX(`${API_URL_UPLOAD}${id}?key=${KEY_UPLOAD}`),
+    ]);
     state.recipe = createRecipeObject(data);
     if (state.bookmarks.some(b => b.id === id)) {
       state.recipe.bookmarked = true;
@@ -50,16 +79,34 @@ export const loadRecipe = async function (id) {
 export const loadSearchResults = async function (query) {
   try {
     state.search.query = query;
-    const data = await AJAX(`${API_URL}?search=${query}&key=${KEY}`);
-    state.search.results = data.data.recipes.map(rec => {
+    const data = await AJAX(
+      `${API_URL_GET}/recipes/complexSearch?query=${query}&apiKey=${KEY_GET}&number=25`
+    );
+
+    const dataUpload = await AJAX(
+      `${API_URL_UPLOAD}?search=${query}&key=${KEY_UPLOAD}`
+    );
+
+    const uploadedResults = dataUpload.data.recipes.map(rec => {
+      if (rec.key)
+        return {
+          id: rec.id,
+          title: rec.title,
+          publisher: rec.sourceName || rec.publisher,
+          image: rec.image,
+          ...(rec.key && { key: rec.key }),
+        };
+    });
+    const dataResults = data.results.map(rec => {
       return {
         id: rec.id,
         title: rec.title,
-        // publisher: rec.publisher,
-        image: rec.image_url,
-        ...(rec.key && { key: rec.key }),
+        publisher: rec.sourceName,
+        image: rec.image,
       };
     });
+    state.search.results = [...uploadedResults, ...dataResults];
+
     state.search.page = 1;
   } catch (err) {
     console.log(`${err} `);
@@ -77,7 +124,7 @@ export const getSearchResultsPage = function (page = state.search.page) {
 
 export const updateServings = function (newServings) {
   state.recipe.ingredients.forEach(ing => {
-    ing.quantity = (ing.quantity * newServings) / state.recipe.servings; // newQt = oldQt * newServings/Old Serving 2* 8/4 = 4
+    ing.amount = ing.amount * (newServings / state.recipe.servings); // newQt = oldQt * newServings/Old Serving 2* 8/4 = 4
   });
   state.recipe.servings = newServings;
 };
@@ -86,16 +133,17 @@ const persistBookmarks = function () {
 };
 export const addBookmark = function (recipe) {
   // Add bookmark
+  state.recipe.bookmarked = true;
   state.bookmarks.push(recipe);
 
   // Mark current recipe as bookmark
   // if (recipe.id === state.recipe.id)
-  state.recipe.bookmarked = true;
 
   persistBookmarks();
 };
 
 export const deleteBookmark = function (id) {
+  console.log(typeof id);
   const index = state.bookmarks.findIndex(el => el.id === id);
   state.bookmarks.splice(index, 1);
 
@@ -114,7 +162,6 @@ initiate();
 const clearBookmarks = function () {
   localStorage.clear('bookmarks');
 };
-
 export const uploadRecipe = async function (newRecipe) {
   try {
     const ingredients = Object.entries(newRecipe)
@@ -142,17 +189,17 @@ export const uploadRecipe = async function (newRecipe) {
       servings: +newRecipe.servings,
       ingredients,
     };
-    const data = await AJAX(`${API_URL}?key=${KEY}`, recipe);
+    const data = await AJAX(`${API_URL_UPLOAD}?key=${KEY_UPLOAD}`, recipe);
     state.recipe = createRecipeObject(data);
+    console.log(state.recipe);
     addBookmark(state.recipe);
   } catch (err) {
     throw err;
   }
 };
-
-export const loadCalendar = function () {
-  new datedreamer.calendarToggle({
-    element: '#calendar',
+export const loadCalendar = function (element) {
+  state.datedreamer = new datedreamer.calendarToggle({
+    element: `${element}`,
     format: 'MM/DD/YYYY',
     // darkMode: true,
     theme: 'lite-purple',
@@ -171,4 +218,8 @@ export const loadCalendar = function () {
       console.log(new Date(e.detail).getTime());
     },
   });
+};
+
+export const resetCalendar = function () {
+  state.datedreamer && (state.datedreamer = null);
 };

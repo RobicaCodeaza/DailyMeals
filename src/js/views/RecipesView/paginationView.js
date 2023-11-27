@@ -1,5 +1,5 @@
-import icons from 'url:../../img/icons.svg'; //Parcel 2
-import View from './View';
+import icons from 'url:../../../img/icons.svg'; //Parcel 2
+import View from '../View';
 
 export default class PaginationView extends View {
   _parentElement = document.querySelector('.pagination');
@@ -18,7 +18,6 @@ export default class PaginationView extends View {
     const numPages = Math.ceil(
       this._data.results.length / this._data.resultsPerPage
     );
-    console.log(curPage);
     if (curPage === 1 && numPages > 1) {
       return `  
     <button data-goto = "${

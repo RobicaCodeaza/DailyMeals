@@ -7,48 +7,28 @@ export default class SidebarView extends View {
   _sidebar = document.querySelector('.sidebar__nav');
   _allMenuBtns = Array.from(document.querySelectorAll('.buttonMenu'));
   addHandlerRender(handler) {
-    window.addEventListener(
+    this._sidebar.addEventListener(
       'click',
       function (e) {
-        if (e.target.closest('.buttonMenu')) {
-          const btnClicked = e.target.closest('.buttonMenu');
-          btnClicked.classList.add('sidebar__nav__btn--active');
-          this._allMenuBtns.forEach(btn => {
-            if (btn !== btnClicked) {
-              console.log(btn);
-              btn.classList.remove('sidebar__nav__btn--active');
-            }
-          });
-          handler(btnClicked.id.trim());
-        }
+        if (!e.target.closest('.buttonMenu')) return;
+        const btnClicked = e.target.closest('.buttonMenu');
+        btnClicked.classList.add('sidebar__nav__btn--active');
+        this._allMenuBtns.forEach(btn => {
+          if (btn !== btnClicked) {
+            btn.classList.remove('sidebar__nav__btn--active');
+          }
+        });
+        handler(btnClicked.id);
       }.bind(this)
     );
   }
-  _generateMarkup() {
-    if (this._data === 'MealsDashboardView') {
-      console.log('Entered Meals Dashboard');
-      return `
-    <div class="container container--dashboard">
-      <header class="header header--main">
-        <div class="header--main__date">22.11.2023</div>
-        <div class="header--main__welcome">
-          Welcome back, Stoica Robert!
-        </div>
-        <div class="header--main__user">
-          <img src="${user}" alt="User's Photo" />
-        </div>
-      </header>
-        <div class="calendar"></div>
-    </div>
 
-      `;
-    }
-    if (this._data.trim() === 'RecipesView') {
-      console.log(window.location.hash);
-      console.log('Entered Recipes');
+  _generateMarkup() {
+    if (this._data.includes('RecipesView')) {
       return `
       <div class="container container--recipes">
       <div class="header header--recipes">
+       <div class="calendar display-none" id="calendar"></div> 
         <form class="search">
           <input
             type="text"
@@ -122,6 +102,7 @@ export default class SidebarView extends View {
       </div>
       <div class="recipe"></div>
     </div>
+    <div class="overlay hidden"></div>
     <div class="add-recipe-window hidden">
       <button class="btn--close-modal">&times;</button>
       <form class="upload">
@@ -192,6 +173,28 @@ export default class SidebarView extends View {
           <span>Upload</span>
         </button>
       </form>
+    </div>
+   
+
+      `;
+    } else {
+      console.log('Entered Meals Dashboard');
+      return `
+      <div class="container container--dashboard">
+      <header class="header header--main">
+        <div class="header--main__date">22.11.2023</div>
+        <div class="header--main__welcome">
+          Welcome back, Stoica Robert!
+        </div>
+        <div class="header--main__user">
+          <img src="${user}" alt="User's Photo" />
+        </div>
+      </header>
+      <div class="add-meals">
+        <div class="calendar" id="calendar"></div>
+      </div>
+      <div class="graph-general"></div>
+      <div class="graph-daily"></div>
     </div>
 
       `;

@@ -37,17 +37,13 @@
   }
   &--dashboard {
     display: grid;
-    grid-template-rows: min-content repeat(7, 1fr);
+    grid-template-rows: min-content repeat(3, 1fr);
     grid-template-columns: 1fr 1fr;
     grid-template-areas:
       'head head'
-      'add .'
-      'add graph1'
-      'add graph1'
       'add graph1'
       'add graph2'
-      'add graph2'
-      'add graph2';
+      'add graph3';
   }
 }
 

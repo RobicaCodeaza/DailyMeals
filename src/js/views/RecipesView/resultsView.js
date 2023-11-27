@@ -1,5 +1,5 @@
-import icons from 'url:../../img/icons.svg'; //Parcel 2
-import View from './View';
+import icons from 'url:../../../img/icons.svg'; //Parcel 2
+import View from '../View';
 import previewView from './previewView';
 
 export default class ResultsView extends View {
