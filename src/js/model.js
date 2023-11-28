@@ -37,7 +37,6 @@ const createRecipeObject = function (data) {
   } else {
     recipe = data;
   }
-  console.log(recipe);
   return {
     id: recipe.id,
     title: recipe.title,
@@ -58,10 +57,8 @@ const createRecipeObject = function (data) {
 export const loadRecipe = async function (id) {
   try {
     const data = await Promise.any([
-      AJAX(
-        `${API_URL_GET}/recipes/${id}/information?apiKey=${KEY_GET}&includeNutrition=false`
-      ),
-      AJAX(`${API_URL_UPLOAD}${id}?key=${KEY_UPLOAD}`),
+      AJAX(`${API_URL_GET}/recipes/${+id}/information?apiKey=${KEY_GET}`),
+      AJAX(`${API_URL_UPLOAD}${+id}?key=${KEY_UPLOAD}`),
     ]);
     state.recipe = createRecipeObject(data);
     if (state.bookmarks.some(b => b.id === id)) {
@@ -75,6 +72,10 @@ export const loadRecipe = async function (id) {
     throw err;
   }
 };
+const findNutrient = function (nutrition, nutrient) {
+  const nutrientObj = nutrition.nutrients.find(nutr => nutr.name === nutrient);
+  return nutrientObj.amount;
+};
 
 export const loadSearchResults = async function (query) {
   try {
@@ -82,13 +83,11 @@ export const loadSearchResults = async function (query) {
     const data = await AJAX(
       `${API_URL_GET}/recipes/complexSearch?query=${query}&apiKey=${KEY_GET}&number=25`
     );
-
     const dataUpload = await AJAX(
       `${API_URL_UPLOAD}?search=${query}&key=${KEY_UPLOAD}`
     );
-
-    const uploadedResults = dataUpload.data.recipes.map(rec => {
-      if (rec.key)
+    const uploadedResults = dataUpload.data.recipes.filter(rec => {
+      if (rec.key) {
         return {
           id: rec.id,
           title: rec.title,
@@ -96,16 +95,28 @@ export const loadSearchResults = async function (query) {
           image: rec.image,
           ...(rec.key && { key: rec.key }),
         };
+      }
     });
-    const dataResults = data.results.map(rec => {
+
+    let dataResults = data.results.map(async function (rec) {
+      const nutrition = await AJAX(
+        `${API_URL_GET}/recipes/${rec.id}/nutritionWidget.json?&apiKey=${KEY_GET}`
+      );
       return {
         id: rec.id,
         title: rec.title,
         publisher: rec.sourceName,
         image: rec.image,
+        calories: findNutrient(nutrition, 'Calories'),
+        proteins: findNutrient(nutrition, 'Protein'),
+        carbs: findNutrient(nutrition, 'Carbohydrates'),
+        fats: findNutrient(nutrition, 'Fat'),
       };
     });
+    dataResults = await Promise.all(dataResults);
+    console.log(dataResults);
     state.search.results = [...uploadedResults, ...dataResults];
+    console.log(state.search.results);
 
     state.search.page = 1;
   } catch (err) {
@@ -162,6 +173,7 @@ initiate();
 const clearBookmarks = function () {
   localStorage.clear('bookmarks');
 };
+
 export const uploadRecipe = async function (newRecipe) {
   try {
     const ingredients = Object.entries(newRecipe)

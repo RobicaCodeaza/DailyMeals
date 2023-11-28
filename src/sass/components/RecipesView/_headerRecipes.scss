@@ -101,21 +101,27 @@
 }
 
 .bookmarks {
-  padding: 1rem 0;
+  padding: 1rem 2rem;
   position: absolute;
   // right: 0;
   right: -2.5rem;
   z-index: 10;
-  width: 40rem;
+  min-width: 50rem;
   background-color: #fff;
   box-shadow: 0 0.8rem 5rem 2rem rgba($color-grey-dark-1, 0.1);
+  max-height: 50vh;
+  overflow-y: scroll;
 
   visibility: hidden;
   opacity: 0;
-  transition: all 0.5s 0.2s;
+  transition: all 0.3s 0.1s;
+  border-radius: 1.2rem;
 
   &__list {
     list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
   }
 
   &__field {

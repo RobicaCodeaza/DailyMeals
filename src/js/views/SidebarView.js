@@ -174,8 +174,6 @@ export default class SidebarView extends View {
         </button>
       </form>
     </div>
-   
-
       `;
     } else {
       console.log('Entered Meals Dashboard');

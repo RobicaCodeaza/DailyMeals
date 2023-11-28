@@ -14,11 +14,14 @@
 .results {
   list-style: none;
   margin-bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
 }
 
 .pagination {
   padding: 0 1.5rem;
-
+  margin-top: auto;
   &::after {
     content: '';
     display: table;
