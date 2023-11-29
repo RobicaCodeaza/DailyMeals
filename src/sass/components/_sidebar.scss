@@ -30,17 +30,16 @@
     text-decoration: none;
     font-size: 1.4rem;
     font-weight: 600;
-    padding: 1rem 2rem;
+    padding: 1rem 3rem;
     border-radius: 1.2rem;
-    color: $color-set2-primary-dark-2;
-    // padding: 1rem 2rem;
     text-transform: uppercase;
     transition: all 0.4s;
+    color: $color-set2-primary-dark-3;
     background-image: linear-gradient(
       120deg,
       transparent 0%,
       transparent 49.99%,
-      $color-set2-primary-dark-2 50%
+      $color-set2-primary-dark-1 50%
     );
     background-size: 220%;
     background-position: left;
@@ -61,18 +60,18 @@
 
       .sidebar__nav__btn__icon {
         svg {
-          fill: $color-grad-2;
+          fill: $color-grad-1;
         }
       }
     }
     &--active {
       background-position: right;
-      color: $color-set2-primary-light-3;
+      color: $color-set2-primary-light-1;
       transform: translateX(1.2rem);
 
       .sidebar__nav__btn__icon {
         svg {
-          fill: $color-grad-2;
+          fill: $color-grad-1;
         }
       }
     }

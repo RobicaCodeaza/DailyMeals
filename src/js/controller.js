@@ -212,7 +212,7 @@ const controlMenu = function (view) {
     resetUrl();
   }
 };
-controlMenu(window.location.toString());
-sidebarView.addHandlerRender(controlMenu);
+// controlMenu(window.location.toString());
+// sidebarView.addHandlerRender(controlMenu);
 
 //http://localhost:1234/RecipesView#680975

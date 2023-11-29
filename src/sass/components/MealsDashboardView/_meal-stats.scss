@@ -1,0 +1,71 @@
+@use '../../abstracts/' as *;
+
+.meal-stats {
+  background-color: $color-grey-light-1;
+  padding: 2rem;
+  align-items: center;
+  justify-items: center;
+  border-radius: 1.5rem;
+  grid-area: meal-stats;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(auto-fit, max-content);
+  gap: 3.2rem;
+  &__stat {
+    background-color: $color-grey-light-2;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.2rem;
+    padding: 0 2rem;
+    border-radius: 1.2rem;
+    &__icon-box {
+      background-color: $color-set2-primary-dark-2;
+      border-radius: 1.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+
+      // flex: 1 0 0;
+      svg {
+        width: 3.2rem;
+        height: 3.2rem;
+      }
+      .icon-calories {
+        stroke: #ff5a00;
+      }
+      .icon-weight {
+        stroke: #8e71f5;
+      }
+      .icon-body-fat {
+        fill: #ffe808;
+      }
+      .icon-proteins {
+        fill: #51cf66;
+      }
+      .icon-carbs {
+        fill: #94d82d;
+      }
+      .icon-fats {
+        fill: #ffd43b;
+      }
+    }
+
+    &__total {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      &__value {
+        font-weight: 700;
+      }
+      &__name {
+        font-weight: 500;
+        color: #818697;
+      }
+    }
+  }
+}

@@ -7,23 +7,22 @@
       align-items: center;
       padding: 1.5rem 3rem;
       transition: all 0.3s;
-      // border-right: 1px solid #fff;
       color: $color-primary;
       text-decoration: none;
       border-radius: 1.2rem;
-      border: 2px solid $color-grey-light-2;
+      border: 2px solid $color-grey-lightest;
+      background-color: $color-grey-light-1;
     }
 
     &:hover {
-      border: 2px solid rgba($color-grad-1, 0.75);
+      border: 2px solid rgba($color-grad-1, 0.6);
       transform: translateY(-2px);
       color: $color-grad-2;
-      box-shadow: $shadow-medium;
       box-shadow: $shadow-light;
     }
 
     &--active {
-      background-color: $color-grey-light-1;
+      background-color: $color-grey-lightest !important;
       border: 2px solid $color-grad-1 !important;
     }
   }

@@ -1,19 +1,21 @@
 @use '../../abstracts/' as *;
 .header--recipes {
-  padding: 1.5rem 3rem;
+  padding: 1rem 3rem;
 }
 .search {
-  background-color: #fff;
+  background-color: $color-grey-light-2;
   border-radius: 1.2rem;
   display: flex;
   align-items: center;
   padding-left: 3rem;
   transition: all 0.3s;
   margin-left: auto;
+  border: 1px solid transparent;
 
   &:focus-within {
     transform: translateY(-2px);
-    box-shadow: 0 0.7rem 3rem rgba($color-grey-dark-1, 0.08);
+    box-shadow: $shadow-light;
+    border: 1px solid $color-grad-2;
   }
 
   &__field {
@@ -29,7 +31,7 @@
     }
 
     &::placeholder {
-      color: $color-grey-light-3;
+      color: $color-primary;
     }
 
     @media only screen and (max-width: $bp-medium) {
@@ -46,6 +48,8 @@
     // font-family: inherit;
     // padding: 0.75rem;
     svg {
+      height: 2.4rem;
+      width: 2.4rem;
       margin-right: 1.5rem;
     }
   }
@@ -107,7 +111,7 @@
   right: -2.5rem;
   z-index: 10;
   min-width: 50rem;
-  background-color: #fff;
+  background-color: $color-grey-light-2;
   box-shadow: 0 0.8rem 5rem 2rem rgba($color-grey-dark-1, 0.1);
   max-height: 50vh;
   overflow-y: scroll;

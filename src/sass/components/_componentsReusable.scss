@@ -5,7 +5,7 @@
   border: none;
   text-transform: uppercase;
   background-color: transparent;
-  color: $color-set2-primary-dark-1;
+  color: $color-set2-primary-dark-4;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -206,7 +206,7 @@
   display: flex;
   justify-content: space-between;
   padding: 1rem 6rem;
-  color: $color-set2-primary-dark-2;
+  color: $color-set2-primary-dark-3;
   font-weight: 500;
   &__date {
     font-size: 1.8rem;
@@ -220,7 +220,7 @@
     padding: 0.2rem;
     width: 5rem;
     height: 5rem;
-    background-color: $color-set2-primary-dark-2;
+    background-color: $color-set2-primary-dark-3;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -231,7 +231,7 @@
       height: 100%;
     }
     &:hover {
-      background-color: $color-set2-primary;
+      background-color: $color-set2-primary-dark-1;
     }
   }
 }
@@ -269,4 +269,13 @@
     fill: $color-primary;
     animation: rotate 2s infinite linear;
   }
+}
+
+.title__dashboard {
+  display: block;
+  font-size: 1.6rem;
+  font-weight: 500;
+  letter-spacing: 0.25px;
+  color: #21263b;
+  font-weight: 700;
 }

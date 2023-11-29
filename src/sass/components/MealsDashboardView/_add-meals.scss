@@ -1,0 +1,62 @@
+@use '../../abstracts/' as *;
+
+.add-meals {
+  grid-area: add-meals;
+  background-color: $color-grey-light-1;
+  padding: 2rem 4rem;
+  border-radius: 1.5rem;
+  // max-height: 20vw;
+  // max-height: 25vw;
+  overflow-y: scroll;
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.6rem;
+
+    &__title {
+      color: #21263b;
+    }
+  }
+
+  &__table {
+    border-collapse: collapse;
+    width: 100%;
+    table-layout: auto;
+    th,
+    td {
+      padding: 1rem 2rem;
+      text-align: left;
+    }
+    thead tr {
+      color: #818697;
+    }
+    thead th {
+      width: 16.67%;
+    }
+    tbody th {
+      color: #272c40;
+    }
+    tbody tr:nth-child(even) {
+      background-color: #f7f8fb;
+      & td {
+        color: #272c40;
+      }
+    }
+    tbody tr:nth-child(odd) {
+      background-color: $color-set2-primary-light-3;
+    }
+  }
+}
+
+.btn--add {
+  display: block;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  svg {
+    width: 2.4rem;
+    height: 2.4rem;
+    fill: $color-set2-primary-dark-1;
+  }
+}

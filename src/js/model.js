@@ -76,12 +76,13 @@ const findNutrient = function (nutrition, nutrient) {
   const nutrientObj = nutrition.nutrients.find(nutr => nutr.name === nutrient);
   return nutrientObj.amount;
 };
+const createFullNutrientObject = function () {};
 
 export const loadSearchResults = async function (query) {
   try {
     state.search.query = query;
     const data = await AJAX(
-      `${API_URL_GET}/recipes/complexSearch?query=${query}&apiKey=${KEY_GET}&number=25`
+      `${API_URL_GET}/recipes/complexSearch?query=${query}&apiKey=${KEY_GET}&number=1`
     );
     const dataUpload = await AJAX(
       `${API_URL_UPLOAD}?search=${query}&key=${KEY_UPLOAD}`
@@ -114,7 +115,6 @@ export const loadSearchResults = async function (query) {
       };
     });
     dataResults = await Promise.all(dataResults);
-    console.log(dataResults);
     state.search.results = [...uploadedResults, ...dataResults];
     console.log(state.search.results);
 
