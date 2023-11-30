@@ -4,6 +4,7 @@
   background-color: #21263b;
   padding: 1rem;
   border-radius: 1.5rem;
+  transition: all 0.4s;
 }
 .graph {
   @extend %graph;
@@ -20,7 +21,10 @@
 .graph--general {
   grid-area: graphG;
   // grid-column: 2 / span 2;
+  &--active {
+    grid-column: 2 / span 2;
+  }
 }
 .graph--stats {
-  grid-area: graphP;
+  grid-area: graphS;
 }

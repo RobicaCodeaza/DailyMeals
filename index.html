@@ -154,7 +154,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
+                  <tr class="breakfast">
                     <th>Breakfast</th>
                     <td></td>
                     <td></td>
@@ -184,7 +184,7 @@
                     <td>50g</td>
                     <td>2g</td>
                   </tr>
-                  <tr>
+                  <tr class="lunch">
                     <th>Lunch</th>
                     <td></td>
                     <td></td>
@@ -214,7 +214,7 @@
                     <td>50g</td>
                     <td>2g</td>
                   </tr>
-                  <tr>
+                  <tr class="dinner">
                     <th>Dinner</th>
                     <td></td>
                     <td></td>
@@ -244,7 +244,7 @@
                     <td>50g</td>
                     <td>2g</td>
                   </tr>
-                  <tr>
+                  <tr class="snack">
                     <th>Snack</th>
                     <td></td>
                     <td></td>
@@ -280,6 +280,60 @@
             <div class="graph graph--calories">Graph1</div>
             <div class="graph graph--nutrients">Graph2</div>
             <div class="graph graph--general">Graph3</div>
+            <div class="register-personal-stats">
+              <form class="register-form" action="#">
+                <div class="input-box">
+                  <label for="current-weight"
+                    >Current Weight <strong>(kg)</strong></label
+                  >
+                  <input
+                    type="number"
+                    name="current-weight"
+                    id="current-weight"
+                    required
+                  />
+                </div>
+
+                <div class="input-box">
+                  <label for="goal-weight"
+                    >Goal Weight <strong>(kg)</strong></label
+                  >
+                  <input
+                    type="number"
+                    name="goal-weight"
+                    id="goal-weight"
+                    required
+                  />
+                </div>
+
+                <div class="input-box">
+                  <label for="current-body-fat"
+                    >Current Body Fat <strong>(%)</strong></label
+                  >
+                  <input
+                    type="number"
+                    name="current-body-fat"
+                    id="current-body-fat"
+                    required
+                    placeholder="25%"
+                  />
+                </div>
+
+                <div class="input-box">
+                  <label for="goal-body-fat"
+                    >Goal Body Fat <strong>(%)</strong></label
+                  >
+                  <input
+                    type="number"
+                    name="goal-body-fat"
+                    id="goal-body-fat"
+                    required
+                    placeholder="15%"
+                  />
+                </div>
+                <button class="btn--form" type="submit">Register</button>
+              </form>
+            </div>
             <div class="graph graph--stats">Graph Stats</div>
             <div class="meal-stats">
               <div class="meal-stats__stat">

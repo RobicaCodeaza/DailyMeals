@@ -216,3 +216,11 @@ const controlMenu = function (view) {
 // sidebarView.addHandlerRender(controlMenu);
 
 //http://localhost:1234/RecipesView#680975
+
+const graphGeneral = document.querySelector('.graph--general');
+const registerMealStats = document.querySelector('.register-personal-stats');
+graphGeneral.addEventListener('click', function (e) {
+  if (!e.target.closest('.graph--general')) return;
+  registerMealStats.classList.toggle('display-none');
+  graphGeneral.classList.toggle('graph--general--active');
+});
