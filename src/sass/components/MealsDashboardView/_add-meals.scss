@@ -13,6 +13,7 @@
     align-items: center;
     justify-content: space-between;
     margin-bottom: 1.6rem;
+    padding: 0 3rem;
 
     &__title {
       color: #21263b;
@@ -58,5 +59,8 @@
     width: 2.4rem;
     height: 2.4rem;
     fill: $color-set2-primary-dark-1;
+  }
+  &:hover > svg {
+    fill: $color-set2-primary;
   }
 }

@@ -65,6 +65,7 @@ export const loadRecipe = async function (id) {
       state.recipe.bookmarked = true;
     } else state.recipe.bookmarked = false;
     // console.log(state.recipe);
+    state.mealTime && (state.recipe.mealTime = state.mealTime);
   } catch (err) {
     // Temporary error handling
     console.log(`${err} `);
@@ -234,4 +235,9 @@ export const loadCalendar = function (element) {
 
 export const resetCalendar = function () {
   state.datedreamer && (state.datedreamer = null);
+};
+
+export const mealTimeSet = function (mealTime = '') {
+  state.mealTime = mealTime;
+  console.log(state.mealTime);
 };

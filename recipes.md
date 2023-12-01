@@ -1,4 +1,4 @@
-        <div class="container container--recipes">
+   <div class="container container--recipes">
           <div class="header header--recipes">
             <div class="calendar display-none" id="calendar"></div>
             <form class="search">
@@ -61,7 +61,7 @@
               <li class="preview">
                 <a class="preview__link preview__link--active" href="#23456">
                   <figure class="preview__fig">
-                    <img src="/src/img/test-1.webp" alt="Test" />
+                    <img src="src/img/test-1.webp" alt="Test" />
                   </figure>
                   <div class="preview__data">
                     <div class="preview__data__text">
@@ -111,7 +111,121 @@
               claim as your own.
             </p>
           </div>
-          <div class="recipe"></div>
+          <div class="recipe">
+            <div class="recipe__header">
+              <figure class="recipe__fig">
+                <img
+                  src="src/img/test-1.webp"
+                  alt="photo
+            "
+                  class="recipe__img"
+                />
+              </figure>
+
+              <div class="recipe__details">
+                <h1 class="recipe__title">
+                  <span>Title</span>
+                </h1>
+                <div class="recipe__info">
+                  <svg class="recipe__info-icon">
+                    <use href="src/img/icons.svg#icon-clock"></use>
+                  </svg>
+                  <span class="recipe__info-data recipe__info-data--minutes"
+                    >Cooking time</span
+                  >
+                  <span class="recipe__info-text">minutes</span>
+                </div>
+                <div class="recipe__info">
+                  <svg class="recipe__info-icon">
+                    <use href="src/img/icons.svg#icon-users"></use>
+                  </svg>
+                  <span class="recipe__info-data recipe__info-data--people"
+                    >servings</span
+                  >
+                  <span class="recipe__info-text">45</span>
+
+                  <div class="recipe__info-buttons">
+                    <button
+                      data-update-to="servings"
+                      class="btn--tiny btn--update-servings"
+                    >
+                      <svg>
+                        <use href="src/img/icons.svg#icon-minus-circle"></use>
+                      </svg>
+                    </button>
+                    <button
+                      data-update-to="."
+                      class="btn--tiny btn--update-servings"
+                    >
+                      <svg>
+                        <use href="src/img/icons.svg#icon-plus-circle"></use>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+                <div class="user-box">
+                  <div class="recipe__user-generated">
+                    <svg>
+                      <use href="src/img/icons.svg#icon-user"></use>
+                    </svg>
+                  </div>
+                  <button class="btn--round btn--bookmark">
+                    <svg class="">
+                      <use href="src/img/icons.svg#icon-bookmark-fill"></use>
+                    </svg>
+                  </button>
+                </div>
+                <div class="user-box">
+                  <form action="#" id="form-meal-time">
+                    <select
+                      name="select-meal-time"
+                      id="select-meal-time"
+                      required
+                    >
+                      <option value="">Choose meal time</option>
+                      <option value="breakfast">Breakfast</option>
+                      <option value="lunch">Lunch</option>
+                      <option value="dinner">Dinner</option>
+                      <option value="snack">Snack</option>
+                    </select>
+                    <button type="submit" class="btn--form">Add meal</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+
+            <div class="recipe__cooking">
+              <div class="recipe__ingredients">
+                <h2 class="heading--2">Recipe ingredients</h2>
+                <ul class="recipe__ingredient-list">
+                  <li class="recipe__ingredient">
+                    <svg class="recipe__icon">
+                      <use href="src/img/icons.svg#icon-check"></use>
+                    </svg>
+                    <div class="recipe__quantity">quantity</div>
+                    <div class="recipe__description">
+                      <span class="recipe__unit">unit</span>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+
+              <div class="recipe__directions">
+                <h2 class="heading--2">How to cook it</h2>
+                <p class="recipe__directions-text">
+                  This recipe was carefully designed and tested by
+                  <span class="recipe__publisher">Publisher</span>. Please check
+                  out directions at their website.
+                </p>
+                <a class="btn--small recipe__btn" href="#" target="_blank">
+                  <span>Directions</span>
+                  <svg class="search__icon">
+                    <use href="src/img/icons.svg#icon-arrow-right"></use>
+                  </svg>
+                </a>
+              </div>
+            </div>
+          </div>
         </div>
         <div class="overlay hidden"></div>
         <div class="add-recipe-window hidden">

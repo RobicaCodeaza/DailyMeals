@@ -90,7 +90,7 @@
     flex: 1;
     display: grid;
     grid-template-columns: repeat(auto-fit, min-content);
-    gap: 2.5rem 2.5rem;
+    gap: 2.5rem;
     padding: 3rem;
     justify-items: center;
   }
@@ -134,7 +134,7 @@
     width: 4rem;
     border-radius: 10rem;
 
-    margin-left: auto;
+    // margin-left: auto;
     margin-right: 1.75rem;
 
     svg {
@@ -217,5 +217,43 @@
 
   &__publisher {
     font-weight: 700;
+  }
+}
+
+.user-box {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#form-meal-time {
+  select {
+    display: inline-block;
+    font-family: inherit;
+    font-size: inherit;
+    border-radius: 0.5rem;
+    color: $color-grey-light-1;
+    // height: 100%;
+    // max-width: 30%;
+    background-image: linear-gradient(to bottom right, #fbdb89, #f48982);
+    border: none;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 0.5rem;
+
+    option {
+      background-color: $color-grad-2;
+    }
+  }
+  button {
+    display: inline-block;
+    // width: 10rem;
+    padding: 0.45rem;
+    border-radius: 0.5rem;
+    border: 1px solid transparent;
+    &:hover {
+      border: 1px solid $color-set2-primary-dark-2;
+    }
   }
 }

@@ -11,6 +11,7 @@ import ResultsView from './views/RecipesView/resultsView';
 import PaginationView from './views/RecipesView/paginationView';
 import BookmarksView from './views/RecipesView/bookmarksView';
 import AddRecipeView from './views/RecipesView/addRecipeView';
+
 let bookmarksView;
 let recipeView;
 let searchView;
@@ -20,7 +21,8 @@ let resultsView;
 
 // Importing MealsDashboardView
 import CalendarView from './views/MealsDashboardView/CalendarView';
-let calendarView;
+import AddMealsView from './views/MealsDashboardView/addMealsView';
+let calendarView, addMealsView;
 
 // Importing Sidebar
 import SidebarView from './views/SidebarView';
@@ -39,6 +41,7 @@ const controlRecipes = async function (e) {
     const id = window.location.hash.slice(1);
     if (!id) return;
     recipeView.renderSpinner();
+
     // 0.Update results view to mark selected search result
     resultsView.update(model.getSearchResultsPage());
     bookmarksView.update(model.state.bookmarks);
@@ -48,6 +51,8 @@ const controlRecipes = async function (e) {
 
     // 2.Rendering recipe
     recipeView.render(model.state.recipe);
+
+    recipeView.addHandlerAddMeal(controlAddMealTime);
   } catch (err) {
     console.log(err);
 
@@ -146,6 +151,11 @@ const controlAddRecipe = async function (newRecipe) {
   }
 };
 
+const controlAddMealTime = function (mealTime) {
+  controlMenu();
+  model.mealTimeSet(mealTime);
+};
+
 const initRecipesView = function () {
   bookmarksView = new BookmarksView();
   recipeView = new RecipeView();
@@ -172,12 +182,19 @@ const controlCalendar = function () {
   model.loadCalendar('#calendar');
 };
 
+const controlMealTime = function (mealTime) {
+  controlMenu('RecipesView');
+  model.mealTimeSet(mealTime);
+};
+
 const initMealsDashboardView = function () {
   calendarView = new CalendarView();
+  addMealsView = new AddMealsView();
 };
 
 const initFncMealsDashboardView = function () {
   calendarView.addHandlerRender(controlCalendar);
+  addMealsView.addHandlerMealTime(controlMealTime);
 };
 
 // -----------------------------
@@ -186,7 +203,7 @@ const initFncMealsDashboardView = function () {
 let recipesViewInitiate = false;
 let mealsViewInitiate = false;
 
-const resetUrl = function (view = 'MealsDashboardView') {
+const resetUrl = function (view) {
   history.pushState({ view: view }, '', view);
   const popStateEvent = new PopStateEvent('popstate', {
     state: { view: view },
@@ -198,10 +215,10 @@ const renderBefore = function (viewClass, data = '') {
   viewClass.render(data);
 };
 
-const controlMenu = function (view) {
+const controlMenu = function (view = 'MealsDashboardView') {
   sidebarView.render(view);
 
-  if (view.includes('RecipesView')) {
+  if (view?.includes('RecipesView')) {
     resetUrl(view);
     initRecipesView();
     initFncRecipesView();
@@ -209,18 +226,28 @@ const controlMenu = function (view) {
   } else {
     initMealsDashboardView();
     initFncMealsDashboardView();
-    resetUrl();
+    resetUrl(view);
   }
 };
-// controlMenu(window.location.toString());
-// sidebarView.addHandlerRender(controlMenu);
+controlMenu(window.location.toString());
+sidebarView.addHandlerRender(controlMenu);
 
 //http://localhost:1234/RecipesView#680975
 
-const graphGeneral = document.querySelector('.graph--general');
-const registerMealStats = document.querySelector('.register-personal-stats');
-graphGeneral.addEventListener('click', function (e) {
-  if (!e.target.closest('.graph--general')) return;
-  registerMealStats.classList.toggle('display-none');
-  graphGeneral.classList.toggle('graph--general--active');
-});
+// const graphGeneral = document.querySelector('.graph--general');
+// const registerMealStats = document.querySelector('.register-personal-stats');
+// graphGeneral.addEventListener('click', function (e) {
+//   if (!e.target.closest('.graph--general')) return;
+//   registerMealStats.classList.toggle('display-none');
+//   graphGeneral.classList.toggle('graph--general--active');
+// });
+
+// document
+//   .getElementById('form-meal-time')
+//   .addEventListener('submit', function (e) {
+//     e.preventDefault();
+//     const arrayForm = [...new FormData(this)];
+//     console.log(new FormData(this));
+//     const objectEntries = Object.fromEntries(arrayForm);
+//     console.log(objectEntries);
+//   });

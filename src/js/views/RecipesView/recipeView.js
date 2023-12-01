@@ -6,6 +6,7 @@ import View from '../View';
 export default class RecipeView extends View {
   _parentElement = document.querySelector('.recipe');
   _errorMessage = 'We could not find the recipe.Please try again!';
+
   _message = '';
 
   addHandlerRender(handler) {
@@ -31,6 +32,23 @@ export default class RecipeView extends View {
       handler();
     });
   }
+  addHandlerAddMeal(handler) {
+    // this._parentElement.addEventListener('click', function (e) {
+    //   const submit = e.target.closest('.btn--form');
+    //   if (!submit) return;
+    //   e.preventDefault();
+    //   const mealTime = document.querySelector('select').value;
+    //   handler(mealTime);
+    // });
+    document
+      .querySelector('#form-meal-time')
+      .addEventListener('submit', function (e) {
+        e.preventDefault();
+        const mealTime = document.querySelector('select').value;
+        handler(mealTime);
+      });
+  }
+
   _generateMarkup() {
     return `   
     <div class="recipe__header">
@@ -80,20 +98,47 @@ export default class RecipeView extends View {
             </button>
           </div>
         </div>
+        <div class="user-box">
 
-        <div class="recipe__user-generated ${this._data.key ? '' : 'hidden'}">
-          <svg>
-            <use href="${icons}#icon-user"></use>
-          </svg>
-        </div>
-        <button class="btn--round btn--bookmark">
-          <svg class="">
-            <use href="${icons}#icon-bookmark${
+          <div class="recipe__user-generated ${this._data.key ? '' : 'hidden'}">
+            <svg>
+              <use href="${icons}#icon-user"></use>
+            </svg>
+          </div>
+          <button class="btn--round btn--bookmark">
+            <svg class="">
+              <use href="${icons}#icon-bookmark${
       this._data.bookmarked ? '-fill' : ''
     }">
-            </use>
-          </svg>
-        </button>
+              </use>
+            </svg>
+          </button>
+        </div>
+
+        <div class="user-box">
+          <form action="#" id="form-meal-time">
+            <select
+              name="select-meal-time"
+              id="select-meal-time"
+              required
+            >
+              <option value="">Choose meal time</option>
+              <option value="breakfast" ${
+                this._data.mealTime === 'breakfast' ? 'selected' : ''
+              }>Breakfast</option>
+              <option value="lunch" ${
+                this._data.mealTime === 'lunch' ? 'selected' : ''
+              }>Lunch</option>
+              <option value="dinner" ${
+                this._data.mealTime === 'diner' ? 'selected' : ''
+              }>Dinner</option>
+              <option value="snack" ${
+                this._data.mealTime === 'snack' ? 'selected' : ''
+              }>Snack</option>
+            </select>
+            <button type="submit" class="btn--form">Add meal</button>
+          </form>
+        </div>
       </div>
     </div>
 
