@@ -3,6 +3,7 @@
 .content {
   display: flex;
   width: 100dvw;
+  overflow-y: scroll;
 }
 
 .sidebar__nav {
@@ -19,7 +20,6 @@
 .container {
   height: calc(100dvh);
   background-color: $color-grey-light-2;
-  overflow: hidden;
   // box-shadow: 0 2rem 6rem 0.5rem rgba($color-grey-dark-1, 0.2);
 
   &--recipes {
@@ -39,20 +39,20 @@
   &--dashboard {
     display: grid;
     grid-template-rows: min-content 1fr;
-    grid-template-columns: 1fr 1fr;
-    grid-template-areas: 'head head' 'meals-details meals-details';
+    // grid-template-columns: 1fr 1fr;
+    grid-template-areas: 'head' 'meals-details';
 
     .meals-details {
       grid-area: meals-details;
       // border: 1px solid $color-grey-dark-1;
-      max-height: 100%;
+      height: 100%;
       overflow-y: hidden;
-      padding: 4rem 6rem;
+      padding: 4rem;
       display: grid;
-      grid-template-columns: 2fr repeat(2, 1fr);
-      gap: 3.2rem;
-      grid-template-rows: repeat(3, 1fr);
-      grid-template-areas: 'add-meals graphC graphN' 'add-meals graphG registerP' 'meal-stats graphS graphS';
+      grid-template-columns: 1fr 1fr;
+      gap: 3.5rem;
+      grid-template-rows: 1fr min-content 1fr;
+      grid-template-areas: 'add-meals graphG' 'add-meals registerP ' 'meal-stats graphS';
     }
   }
 }

@@ -130,7 +130,7 @@ export default class RecipeView extends View {
                 this._data.mealTime === 'lunch' ? 'selected' : ''
               }>Lunch</option>
               <option value="dinner" ${
-                this._data.mealTime === 'diner' ? 'selected' : ''
+                this._data.mealTime === 'dinner' ? 'selected' : ''
               }>Dinner</option>
               <option value="snack" ${
                 this._data.mealTime === 'snack' ? 'selected' : ''

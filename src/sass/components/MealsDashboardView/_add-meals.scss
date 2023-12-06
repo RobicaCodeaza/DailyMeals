@@ -33,7 +33,7 @@
       color: #818697;
     }
     thead th {
-      width: 16.67%;
+      width: auto;
     }
     tbody th {
       color: #272c40;
@@ -62,5 +62,20 @@
   }
   &:hover > svg {
     fill: $color-set2-primary;
+  }
+}
+
+.btn--delete {
+  display: block;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  svg {
+    width: 2.4rem;
+    height: 2.4rem;
+    fill: #94d82d;
+  }
+  &:hover > svg {
+    fill: #ff5a00;
   }
 }

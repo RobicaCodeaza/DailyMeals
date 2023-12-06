@@ -21,11 +21,13 @@ let resultsView;
 
 // Importing MealsDashboardView
 import CalendarView from './views/MealsDashboardView/CalendarView';
-import AddMealsView from './views/MealsDashboardView/addMealsView';
-let calendarView, addMealsView;
+import AddMealsView from './views/MealsDashboardView/AddMealsView';
+import GraphGeneralView from './views/MealsDashboardView/GraphGeneralView';
+let calendarView, addMealsView, graphGeneralView;
 
 // Importing Sidebar
 import SidebarView from './views/SidebarView';
+import { async } from 'regenerator-runtime';
 const sidebarView = new SidebarView();
 
 // if (module.hot) {
@@ -62,7 +64,6 @@ const controlRecipes = async function (e) {
 
 const controlSearchResults = async function () {
   try {
-    console.log('Added');
     resultsView.renderSpinner();
 
     // 1. Get Search query
@@ -151,9 +152,15 @@ const controlAddRecipe = async function (newRecipe) {
   }
 };
 
-const controlAddMealTime = function (mealTime) {
-  controlMenu();
-  model.mealTimeSet(mealTime);
+const controlAddMealTime = async function (mealTime) {
+  try {
+    model.mealTimeSet(mealTime);
+    await model.addMeal();
+    controlMenu();
+    // controlAddMeals();
+  } catch (err) {
+    alert(err.message);
+  }
 };
 
 const initRecipesView = function () {
@@ -177,24 +184,60 @@ const initFncRecipesView = function () {
 
 // -----------------------------
 // MealsDashboardView
-const controlCalendar = function () {
-  console.log('Entered');
-  model.loadCalendar('#calendar');
+const controlCalendarRender = function () {
+  calendarView.renderCalendar(model.dayjsFormat(), controlCalendarChange);
+};
+const controlCalendarChange = function (date) {
+  model.setDay(date);
+  controlAddMeals();
 };
 
-const controlMealTime = function (mealTime) {
+const controlMealTimeRender = function (mealTime) {
   controlMenu('RecipesView');
   model.mealTimeSet(mealTime);
+};
+
+const controlAddMeals = async function () {
+  try {
+    model.findMealDaily();
+    if (model.state.mealDaily.added) {
+      addMealsView.render(model.state.mealDaily.meals);
+    } else addMealsView.update(model.state.mealDaily.meals);
+  } catch (err) {
+    addMealsView.renderError();
+  }
+};
+const controlDeleteMeals = function (mealId, mealTime) {
+  model.deleteMeal(mealId, mealTime);
+  resetUrl('MealsDashboardView');
+  addMealsView.update(model.state.mealDaily.meals);
+};
+
+const controlLoadGraphs = async function (
+  graphType = 'general-day-calories-split'
+) {
+  try {
+    console.log(graphType);
+    graphGeneralView.renderSpinner();
+    await model.loadGraph(graphType);
+  } catch (err) {
+    graphGeneralView.renderError(err.message);
+  }
 };
 
 const initMealsDashboardView = function () {
   calendarView = new CalendarView();
   addMealsView = new AddMealsView();
+  graphGeneralView = new GraphGeneralView();
 };
 
 const initFncMealsDashboardView = function () {
-  calendarView.addHandlerRender(controlCalendar);
-  addMealsView.addHandlerMealTime(controlMealTime);
+  calendarView.addHandlerRender(controlCalendarRender);
+  addMealsView.addHandlerMealTime(controlMealTimeRender);
+  addMealsView.addHandlerDeleteMeals(controlDeleteMeals);
+  addMealsView.addHandlerRender(controlAddMeals);
+  graphGeneralView.addHandlerRender(controlLoadGraphs);
+  graphGeneralView.addHandlerModifyGraph(controlLoadGraphs);
 };
 
 // -----------------------------
@@ -209,6 +252,7 @@ const resetUrl = function (view) {
     state: { view: view },
   });
   dispatchEvent(popStateEvent);
+  console.log(popStateEvent);
 };
 
 const renderBefore = function (viewClass, data = '') {
@@ -241,13 +285,3 @@ sidebarView.addHandlerRender(controlMenu);
 //   registerMealStats.classList.toggle('display-none');
 //   graphGeneral.classList.toggle('graph--general--active');
 // });
-
-// document
-//   .getElementById('form-meal-time')
-//   .addEventListener('submit', function (e) {
-//     e.preventDefault();
-//     const arrayForm = [...new FormData(this)];
-//     console.log(new FormData(this));
-//     const objectEntries = Object.fromEntries(arrayForm);
-//     console.log(objectEntries);
-//   });

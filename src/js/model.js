@@ -1,4 +1,8 @@
+'use strict';
 import { async } from 'regenerator-runtime'; // fOR PROMISE POLYFILLING
+// import * as QuickChart from '../../node_modules/quickchart-js';
+const qc = new QuickChart();
+
 import {
   RES_PER_PAGE,
   KEY_GET,
@@ -8,7 +12,23 @@ import {
 } from './config';
 // import { getJSON, sendJSON } from './helpers';
 import { AJAX } from './helpers';
-import * as datedreamer from 'datedreamer';
+
+import dayjs from 'dayjs';
+
+const formatDayTimeStamp = function (date) {
+  if (date) {
+    return +new Date(
+      new Date(date).getFullYear(),
+      new Date(date).getMonth(),
+      new Date(date).getDate()
+    );
+  } else
+    return +new Date(
+      new Date().getFullYear(),
+      new Date().getMonth(),
+      new Date().getDate()
+    );
+};
 
 export const state = {
   recipe: {},
@@ -19,6 +39,12 @@ export const state = {
     resultsPerPage: RES_PER_PAGE,
   },
   bookmarks: [],
+  mealDaily: {
+    day: '',
+    meals: { breakfast: [], lunch: [], dinner: [], snack: [] },
+  },
+  meals: [],
+  day: formatDayTimeStamp(),
 };
 const reconstructIngredients = function (ingredient) {
   return {
@@ -44,6 +70,7 @@ const createRecipeObject = function (data) {
     sourceUrl: recipe.sourceUrl || recipe.source_url,
     image: recipe.image || recipe.image_url,
     servings: recipe.servings,
+    oldServings: recipe.servings,
     cookingTime: recipe.readyInMinutes || recipe.cooking_time,
     ingredients:
       recipe.ingredients ||
@@ -51,6 +78,38 @@ const createRecipeObject = function (data) {
         reconstructIngredients(ingredient)
       ),
     ...(recipe.key && { key: recipe.key }),
+  };
+};
+
+const findNutrient = function (nutrition, nutrient) {
+  const nutrientObj = nutrition.nutrients.find(nutr => nutr.name === nutrient);
+  return nutrientObj.amount;
+};
+const createFullNutrientObject = async function (rec) {
+  const nutrition = await AJAX(
+    `${API_URL_GET}/recipes/${rec.id}/nutritionWidget.json?&apiKey=${KEY_GET}`
+  );
+  return {
+    id: rec.id,
+    title: rec.title,
+    publisher: rec.sourceName,
+    image: rec.image,
+    calories:
+      findNutrient(nutrition, 'Calories') *
+      (rec.servings ? rec.servings / rec.oldServings : 1),
+    proteins:
+      findNutrient(nutrition, 'Protein') *
+      (rec.servings ? rec.servings / rec.oldServings : 1),
+    carbs:
+      findNutrient(nutrition, 'Carbohydrates') *
+      (rec.servings ? rec.servings / rec.oldServings : 1),
+    fats:
+      findNutrient(nutrition, 'Fat') *
+      (rec.servings ? rec.servings / rec.oldServings : 1),
+    weight: `${
+      nutrition.weightPerServing.amount *
+      (rec.servings ? rec.servings / rec.oldServings : 1)
+    }`,
   };
 };
 
@@ -73,11 +132,6 @@ export const loadRecipe = async function (id) {
     throw err;
   }
 };
-const findNutrient = function (nutrition, nutrient) {
-  const nutrientObj = nutrition.nutrients.find(nutr => nutr.name === nutrient);
-  return nutrientObj.amount;
-};
-const createFullNutrientObject = function () {};
 
 export const loadSearchResults = async function (query) {
   try {
@@ -88,7 +142,7 @@ export const loadSearchResults = async function (query) {
     const dataUpload = await AJAX(
       `${API_URL_UPLOAD}?search=${query}&key=${KEY_UPLOAD}`
     );
-    const uploadedResults = dataUpload.data.recipes.filter(rec => {
+    const uploadedResults = dataUpload?.data.recipes.filter(rec => {
       if (rec.key) {
         return {
           id: rec.id,
@@ -100,24 +154,10 @@ export const loadSearchResults = async function (query) {
       }
     });
 
-    let dataResults = data.results.map(async function (rec) {
-      const nutrition = await AJAX(
-        `${API_URL_GET}/recipes/${rec.id}/nutritionWidget.json?&apiKey=${KEY_GET}`
-      );
-      return {
-        id: rec.id,
-        title: rec.title,
-        publisher: rec.sourceName,
-        image: rec.image,
-        calories: findNutrient(nutrition, 'Calories'),
-        proteins: findNutrient(nutrition, 'Protein'),
-        carbs: findNutrient(nutrition, 'Carbohydrates'),
-        fats: findNutrient(nutrition, 'Fat'),
-      };
-    });
+    let dataResults = data.results.map(rec => createFullNutrientObject(rec));
     dataResults = await Promise.all(dataResults);
     state.search.results = [...uploadedResults, ...dataResults];
-    console.log(state.search.results);
+    // console.log(state.search.results);
 
     state.search.page = 1;
   } catch (err) {
@@ -143,6 +183,9 @@ export const updateServings = function (newServings) {
 const persistBookmarks = function () {
   localStorage.setItem('bookmarks', JSON.stringify(state.bookmarks));
 };
+const persistMeals = function () {
+  localStorage.setItem('meals', JSON.stringify(state.meals));
+};
 export const addBookmark = function (recipe) {
   // Add bookmark
   state.recipe.bookmarked = true;
@@ -165,16 +208,48 @@ export const deleteBookmark = function (id) {
   persistBookmarks();
 };
 
+export const deleteMeal = function (mealId, mealTime) {
+  // Finding the day and the index of it for which we want to delete a meal
+  const indexMealDaily = state.meals.findIndex(
+    mealDaily => mealDaily.day === state.day
+  );
+  // Finding the meals for the period of time(breakfast,lunch...)
+  const timeMeals = state.meals.find(mealDaily => mealDaily.day === state.day);
+  // Finding our meal based on recipe id
+  const indexOfMeal = timeMeals.meals[mealTime].findIndex(
+    meal => meal.id === +mealId
+  );
+  // console.log(indexOfMeal);
+  // Deleting the meal from meals[period of time]
+  timeMeals.meals[mealTime].splice(indexOfMeal, 1);
+  // Deleting from state too
+  state.meals.splice(indexMealDaily, 1);
+  // Updating the state for meals of that day selected from calendar
+  state.mealDaily = timeMeals;
+  state.meals.push(state.mealDaily);
+  console.log(state.mealDaily);
+  persistMeals();
+};
+
 const initiate = function () {
-  const storage = localStorage.getItem('bookmarks');
-  if (storage) state.bookmarks = JSON.parse(storage);
+  const storageBookmarks = localStorage.getItem('bookmarks');
+  if (storageBookmarks) state.bookmarks = JSON.parse(storageBookmarks);
+
+  const storageMeals = localStorage.getItem('meals');
+  if (storageMeals) state.meals = JSON.parse(storageMeals);
+
+  // if (state.meals.find(meal => (meal.day = state.day)))
+  //   state.mealDaily = state.meals.find(meal => (meal.day = state.day));
 };
 initiate();
 
 const clearBookmarks = function () {
   localStorage.clear('bookmarks');
 };
-
+// clearBookmarks();
+const clearMeals = function () {
+  localStorage.clear('meals');
+};
 export const uploadRecipe = async function (newRecipe) {
   try {
     const ingredients = Object.entries(newRecipe)
@@ -210,34 +285,262 @@ export const uploadRecipe = async function (newRecipe) {
     throw err;
   }
 };
-export const loadCalendar = function (element) {
-  state.datedreamer = new datedreamer.calendarToggle({
-    element: `${element}`,
-    format: 'MM/DD/YYYY',
-    // darkMode: true,
-    theme: 'lite-purple',
-    // custom styles here
-    styles: `
-     button{
-     color:#003554,
-    
-     }
-     .datedreamer-calendar-toggle{
-      width:25rem;
-     }
-    `,
 
-    onChange: e => {
-      console.log(new Date(e.detail).getTime());
-    },
-  });
+export const dayjsFormat = function () {
+  return dayjs(new Date(state.day)).format('MM/DD/YYYY');
+};
+export const setDay = function (day) {
+  state.day = +new Date(day);
 };
 
-export const resetCalendar = function () {
-  state.datedreamer && (state.datedreamer = null);
-};
+export const loadCalendar = function (element) {};
 
 export const mealTimeSet = function (mealTime = '') {
   state.mealTime = mealTime;
-  console.log(state.mealTime);
+};
+export const findMealDaily = function () {
+  if (!state.meals.find(meal => meal.day === state.day)) {
+    state.mealDaily = {
+      day: '',
+      meals: { breakfast: [], lunch: [], dinner: [], snack: [] },
+    };
+    state.mealDaily.added = false;
+  } else {
+    state.mealDaily = state.meals.find(meal => meal.day === state.day);
+  }
+};
+
+export const addMeal = async function () {
+  try {
+    const fullNutrientRecipe = await createFullNutrientObject(state.recipe);
+    fullNutrientRecipe.mealTime = state.mealTime;
+    if (!state.mealDaily.added) {
+      state.mealDaily.day = state.day;
+      state.mealDaily.meals[state.mealTime].push(fullNutrientRecipe);
+      state.mealDaily.added = true;
+      state.meals.push(state.mealDaily);
+    } else {
+      state.mealDaily.meals[state.mealTime].push(fullNutrientRecipe);
+      const index = state.meals.findIndex(meal => meal.day === state.day);
+      state.meals[index] = state.mealDaily;
+    }
+    persistMeals();
+  } catch (err) {
+    alert(err);
+  }
+};
+
+console.log(
+  +new Date(
+    new Date().getFullYear(),
+    new Date().getMonth(),
+    new Date().getDate()
+  )
+);
+const calcCaloriesPerMealTime = function (mealDaily = state.mealDaily) {
+  const allMealsDaily = Object.values(mealDaily.meals);
+  console.log(allMealsDaily);
+  const totals = allMealsDaily.map(mealTime =>
+    mealTime.reduce((acc, meal) => {
+      return acc + Number(meal.calories.toFixed(0));
+    }, 0)
+  );
+  return totals;
+};
+
+const calcNutrientsPerMealTime = function (
+  mealDaily = state.mealDaily,
+  nutrient = 'proteins'
+) {
+  const allMealsDaily = Object.values(mealDaily.meals);
+  console.log(allMealsDaily);
+  const totals = allMealsDaily.reduce((acc, mealTime) => {
+    return (
+      acc +
+      mealTime.reduce((accumulator, meal) => {
+        return accumulator + meal[nutrient];
+      }, 0)
+    );
+  }, 0);
+  return totals;
+};
+
+const calcAvgCaloriesPerMealtime = function () {
+  const allMealsAllDays = state.meals.map(mealDaily =>
+    calcCaloriesPerMealTime(mealDaily)
+  );
+  let calories = [0, 0, 0, 0];
+  calories = calories.map((_, index) => {
+    const avgCaloriesPerMealType = allMealsAllDays
+      .filter(meals => meals[index] > 0)
+      .reduce((acc, meal, _, allMeals) => {
+        return acc + meal[index] / allMeals.length;
+      }, 0);
+    return avgCaloriesPerMealType.toFixed(0);
+  });
+  return calories;
+};
+
+const loadImage = async function (el, imgPath) {
+  return new Promise(function (resolve, reject) {
+    el.src = imgPath;
+    el.addEventListener('load', function () {
+      resolve(el);
+    });
+    el.addEventListener('error', function () {
+      reject(new Error('Img not found'));
+    });
+  });
+};
+
+const createGraphGeneral = function (
+  type,
+  datasets,
+  title,
+  backgroundColors,
+  labels,
+  cutoutPercentage
+) {
+  qc.setConfig({
+    type: type,
+    data: {
+      datasets: [
+        {
+          fill: true,
+          spanGaps: false,
+          lineTension: 0.4,
+          pointRadius: 3,
+          pointHoverRadius: 3,
+          pointStyle: 'circle',
+          borderDash: [0, 0],
+          barPercentage: 0.9,
+          categoryPercentage: 0.8,
+          data: datasets,
+          label: 'Dataset 1',
+          borderColor: '#0b2866',
+          backgroundColor: backgroundColors,
+          borderWidth: 5,
+          hidden: false,
+        },
+      ],
+      labels: labels,
+    },
+    options: {
+      title: {
+        display: true,
+        position: 'top',
+        fontSize: 16,
+        fontFamily: 'Doris',
+        fontColor: '#e8f0ff',
+        fontStyle: 'bold',
+        padding: 10,
+        lineHeight: 1.2,
+        text: `${title}`,
+      },
+      layout: {
+        padding: {
+          left: 20,
+          top: 10,
+          bottom: 10,
+          right: 0,
+        },
+      },
+      legend: {
+        display: true,
+        position: 'left',
+        align: 'center',
+        fullWidth: true,
+        reverse: false,
+        labels: {
+          fontSize: 16,
+          fontFamily: 'Doris',
+          fontColor: '#e8f0ff',
+          fontStyle: 'bold',
+          padding: 15,
+        },
+      },
+      plugins: {
+        datalabels: {
+          display: true,
+          align: 'center',
+          anchor: 'center',
+          backgroundColor: '#1651cc',
+          borderColor: '#fbdb89',
+          borderRadius: 15,
+          borderWidth: 2,
+          padding: 10,
+          color: '#e8f0ff',
+          font: {
+            family: 'Doris',
+            size: 14,
+            style: 'italic',
+          },
+        },
+      },
+      cutoutPercentage: cutoutPercentage,
+      rotation: -1.5707963267948966,
+      circumference: 6.283185307179586,
+      startAngle: -1.5707963267948966,
+    },
+  });
+  qc.setWidth(600).setHeight(300).setBackgroundColor('#0b2866');
+};
+
+export const loadGraph = async function (graphType) {
+  try {
+    if (graphType.includes('general')) {
+      if (graphType.includes('calories')) {
+        let datasets, title;
+        const type = 'doughnut';
+        const cutoutPercentage = 50;
+        const backgroundColors = ['#FFEBAF', '#9CCC65', '#FFB6C1', '#FFD700'];
+        const labels = ['Breakfast', 'Lunch', 'Dinner', 'Snack'];
+        if (graphType.includes('day')) {
+          title = 'Calories(kcal) - Current day';
+          datasets = calcCaloriesPerMealTime();
+        } else {
+          title = 'Calories(kcal) - Average';
+          datasets = calcAvgCaloriesPerMealtime();
+        }
+        createGraphGeneral(
+          type,
+          datasets,
+          title,
+          backgroundColors,
+          labels,
+          cutoutPercentage
+        );
+      }
+      if (graphType.includes('nutrients')) {
+        let datasets, title;
+        const type = 'pie';
+        const cutoutPercentage = 0;
+        const backgroundColors = ['#51cf66', '#94d82d', '#ffe808'];
+        const labels = ['Proteins', 'Carbs', 'Fats'];
+        if (graphType.includes('day')) {
+          title = 'Nutrients(g) - Current day';
+          datasets = [
+            calcNutrientsPerMealTime(state.mealDaily, 'proteins').toFixed(0),
+            calcNutrientsPerMealTime(state.mealDaily, 'carbs').toFixed(0),
+            calcNutrientsPerMealTime(state.mealDaily, 'fats').toFixed(0),
+          ];
+        } else {
+          title = 'Nutrients(g) - Average';
+        }
+        createGraphGeneral(
+          type,
+          datasets,
+          title,
+          backgroundColors,
+          labels,
+          cutoutPercentage
+        );
+      }
+    }
+    const url = await qc.getUrl();
+    const img = document.querySelector('.graph__img');
+    await loadImage(img, url);
+  } catch (err) {
+    throw err;
+  }
 };

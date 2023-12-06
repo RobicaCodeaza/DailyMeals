@@ -2,6 +2,7 @@ import icons from 'url:../../img/icons.svg'; //Parcel 2
 
 export default class View {
   _data;
+  _element;
   /**
    *Render the received object to the DOM
    @param {Object | Object[]} data The data to be rendered(e.g. recipe)
@@ -11,7 +12,8 @@ export default class View {
    @author Stoica Robert
    @todo Maybe increase functionality
    */
-  render(data, render = true) {
+  render(data, render = true, element = '', afterEnd = false) {
+    element ? (this._parentElement = element) : '';
     if (!data || (Array.isArray(data) && data.length === 0)) {
       return this.renderError();
     }
@@ -20,34 +22,40 @@ export default class View {
     if (!render) {
       return markup;
     }
-    this._clear();
-    this._parentElement.insertAdjacentHTML('afterbegin', markup);
+    if (!afterEnd) this._clear();
+    if (!afterEnd) this._parentElement.insertAdjacentHTML('afterbegin', markup);
+    else this._parentElement.insertAdjacentHTML('afterend', markup);
   }
 
-  update(data) {
+  update(data, element = '') {
     this._data = data;
     const newMarkup = this._generateMarkup();
     //Converting string object to newDom(virtual dom)
     const newDom = document.createRange().createContextualFragment(newMarkup);
     const newElements = Array.from(newDom.querySelectorAll('*'));
     const curElements = Array.from(this._parentElement.querySelectorAll('*'));
-    newElements.forEach((newEl, i) => {
-      const curEl = curElements[i];
+    if (newElements.length < curElements.length) {
+      this._clear();
+      this._parentElement.insertAdjacentHTML('beforeend', newMarkup);
+    } else
+      newElements.forEach((newEl, i) => {
+        const curEl = curElements[i];
 
-      // Update changed text
-      if (
-        !newEl.isEqualNode(curEl) &&
-        newEl.firstChild?.nodeValue.trim() !== ''
-      ) {
-        curEl.textContent = newEl.textContent;
-      }
-      // Update changed attribute
-      if (!newEl.isEqualNode(curEl)) {
-        Array.from(newEl.attributes).forEach(attr =>
-          curEl.setAttribute(attr.name, attr.value)
-        );
-      }
-    });
+        // Update changed text
+        if (
+          !curEl.isEqualNode(newEl) &&
+          newEl.firstChild?.nodeValue.trim() !== ''
+        ) {
+          console.log(curEl);
+          curEl.textContent = newEl.textContent;
+        }
+        // Update changed attribute
+        if (!newEl.isEqualNode(curEl)) {
+          Array.from(newEl.attributes).forEach(attr =>
+            curEl.setAttribute(attr.name, attr.value)
+          );
+        }
+      });
   }
   _clear() {
     this._parentElement.innerHTML = '';

@@ -200,16 +200,18 @@ export default class SidebarView extends View {
             <thead>
               <tr>
                 <th></th>
-                <th>Food</th>
+                <th>Grams</th>
                 <th>Calories</th>
                 <th>Proteins</th>
                 <th>Carbs</th>
                 <th>Fat</th>
+                <th></th>
               </tr>
             </thead>
-            <tbody>
-              <tr class="breakfast">
+            <tbody class ='add-meals__table__body'>
+              <tr class = 'breakfast'>
                 <th>Breakfast</th>
+                <td></td>
                 <td></td>
                 <td></td>
                 <td></td>
@@ -230,16 +232,10 @@ export default class SidebarView extends View {
                   </button>
                 </td>
               </tr>
-              <tr>
-                <td>125g</td>
-                <td>Poridge Oats</td>
-                <td>150 kcal</td>
-                <td>12g</td>
-                <td>50g</td>
-                <td>2g</td>
-              </tr>
+           
               <tr class="lunch">
                 <th>Lunch</th>
+                <td></td>
                 <td></td>
                 <td></td>
                 <td></td>
@@ -260,16 +256,10 @@ export default class SidebarView extends View {
                   </button>
                 </td>
               </tr>
-              <tr>
-                <th></th>
-                <td>Poridge Oats</td>
-                <td>150 kcal</td>
-                <td>12g</td>
-                <td>50g</td>
-                <td>2g</td>
-              </tr>
+        
               <tr class="dinner">
                 <th>Dinner</th>
+                <td></td>
                 <td></td>
                 <td></td>
                 <td></td>
@@ -290,16 +280,10 @@ export default class SidebarView extends View {
                   </button>
                 </td>
               </tr>
-              <tr>
-                <th></th>
-                <td>Poridge Oats</td>
-                <td>150 kcal</td>
-                <td>12g</td>
-                <td>50g</td>
-                <td>2g</td>
-              </tr>
+         
               <tr class="snack">
                 <th>Snack</th>
+                <td></td>
                 <td></td>
                 <td></td>
                 <td></td>
@@ -320,20 +304,45 @@ export default class SidebarView extends View {
                   </button>
                 </td>
               </tr>
-              <tr>
-                <th></th>
-                <td>Poridge Oats</td>
-                <td>150 kcal</td>
-                <td>12g</td>
-                <td>50g</td>
-                <td>2g</td>
-              </tr>
+     
             </tbody>
           </table>
         </div>
-        <div class="graph graph--calories">Graph1</div>
-        <div class="graph graph--nutrients">Graph2</div>
-        <div class="graph graph--general">Graph3</div>
+        
+        <div class="general-splits">
+          <div class="graph graph--general">
+            <img
+              alt="General Graph Img"
+              class="graph__img"
+              id="img-graph-general-splits"
+            />
+          </div>
+
+          <ul class="general-splits__control">
+            <li
+              class="general-splits__control__item "
+            >
+              <button class="btn--control btn--control--active" id="general-day-calories-split">
+                CALORIES(day)
+              </button>
+            </li>
+            <li class="general-splits__control__item">
+              <button class="btn--control" id="general-day-nutrients-split">
+                NUTRIENTS(day)
+              </button>
+            </li>
+            <li class="general-splits__control__item">
+              <button class="btn--control" id="general-all-calories-split">
+                CALORIES(days)
+              </button>
+            </li>
+            <li class="general-splits__control__item">
+              <button class="btn--control" id="general-all-nutrients-split">
+                NUTRIENTS(days)
+              </button>
+            </li>
+          </ul>
+      </div>
         <div class="register-personal-stats">
           <form class="register-form" action="#">
             <div class="input-box">
