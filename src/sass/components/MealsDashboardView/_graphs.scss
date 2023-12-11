@@ -9,6 +9,7 @@
 .graph {
   @extend %graph;
   &__img {
+    transition: all 0.4s;
     position: absolute;
     left: 0;
     top: 0;

@@ -12,18 +12,27 @@ import PaginationView from './views/RecipesView/paginationView';
 import BookmarksView from './views/RecipesView/bookmarksView';
 import AddRecipeView from './views/RecipesView/addRecipeView';
 
-let bookmarksView;
-let recipeView;
-let searchView;
-let paginationView;
-let addRecipeView;
-let resultsView;
+let bookmarksView,
+  recipeView,
+  searchView,
+  paginationView,
+  addRecipeView,
+  resultsView;
 
 // Importing MealsDashboardView
 import CalendarView from './views/MealsDashboardView/CalendarView';
 import AddMealsView from './views/MealsDashboardView/AddMealsView';
 import GraphGeneralView from './views/MealsDashboardView/GraphGeneralView';
-let calendarView, addMealsView, graphGeneralView;
+import RegisterPersonalStatsView from './views/MealsDashboardView/RegisterPersonalStatsView';
+import MealStatsView from './views/MealsDashboardView/MealStatsView';
+import GraphStatsView from './views/MealsDashboardView/GraphStatsView';
+
+let calendarView,
+  addMealsView,
+  graphGeneralView,
+  registerPersonalStatsView,
+  mealStatsView,
+  graphStatsView;
 
 // Importing Sidebar
 import SidebarView from './views/SidebarView';
@@ -190,6 +199,10 @@ const controlCalendarRender = function () {
 const controlCalendarChange = function (date) {
   model.setDay(date);
   controlAddMeals();
+  graphGeneralView.resetBtns();
+  controlLoadGeneralGraphs();
+  controlRenderStats();
+  controlLoadStatsGraphs();
 };
 
 const controlMealTimeRender = function (mealTime) {
@@ -198,30 +211,57 @@ const controlMealTimeRender = function (mealTime) {
 };
 
 const controlAddMeals = async function () {
-  try {
-    model.findMealDaily();
-    if (model.state.mealDaily.added) {
-      addMealsView.render(model.state.mealDaily.meals);
-    } else addMealsView.update(model.state.mealDaily.meals);
-  } catch (err) {
-    addMealsView.renderError();
-  }
+  model.findMealDaily();
+  console.log(model.state.meals);
+  if (model.state.mealDaily.added) {
+    addMealsView.render(model.state.mealDaily.meals);
+  } else addMealsView.update(model.state.mealDaily.meals);
 };
 const controlDeleteMeals = function (mealId, mealTime) {
   model.deleteMeal(mealId, mealTime);
-  resetUrl('MealsDashboardView');
   addMealsView.update(model.state.mealDaily.meals);
+
+  controlLoadGeneralGraphs();
+  model.calcMealDailyStats();
+  mealStatsView.update(model.state);
+  controlLoadStatsGraphs();
 };
 
-const controlLoadGraphs = async function (
+const controlLoadGeneralGraphs = async function (
   graphType = 'general-day-calories-split'
 ) {
   try {
-    console.log(graphType);
     graphGeneralView.renderSpinner();
-    await model.loadGraph(graphType);
+    await model.loadGeneralGraph(graphType);
   } catch (err) {
     graphGeneralView.renderError(err.message);
+  }
+};
+const controlRenderStats = function () {
+  model.calcMealDailyStats();
+  model.findPersonalStatsForDay();
+  mealStatsView.render(model.state);
+};
+const controlRenderCurrentGoal = function () {
+  // model.calcCurrentGoal();
+  registerPersonalStatsView.render(model.state.personal);
+  registerPersonalStatsView.addHandlerToggle();
+};
+const controlRegisterPersonalStats = function (data) {
+  model.addPersonalStats(data);
+  console.log(model.state.meals);
+
+  registerPersonalStatsView.render(model.state.personal);
+  registerPersonalStatsView.addHandlerToggle();
+  mealStatsView.update(model.state);
+};
+
+const controlLoadStatsGraphs = async function (graphType, color) {
+  try {
+    graphStatsView.renderSpinner();
+    await model.loadStatsGraph(graphType, color);
+  } catch (err) {
+    graphStatsView.renderError(err);
   }
 };
 
@@ -229,6 +269,9 @@ const initMealsDashboardView = function () {
   calendarView = new CalendarView();
   addMealsView = new AddMealsView();
   graphGeneralView = new GraphGeneralView();
+  registerPersonalStatsView = new RegisterPersonalStatsView();
+  mealStatsView = new MealStatsView();
+  graphStatsView = new GraphStatsView();
 };
 
 const initFncMealsDashboardView = function () {
@@ -236,15 +279,17 @@ const initFncMealsDashboardView = function () {
   addMealsView.addHandlerMealTime(controlMealTimeRender);
   addMealsView.addHandlerDeleteMeals(controlDeleteMeals);
   addMealsView.addHandlerRender(controlAddMeals);
-  graphGeneralView.addHandlerRender(controlLoadGraphs);
-  graphGeneralView.addHandlerModifyGraph(controlLoadGraphs);
+  graphGeneralView.addHandlerRender(controlLoadGeneralGraphs);
+  graphGeneralView.addHandlerModifyGraph(controlLoadGeneralGraphs);
+  mealStatsView.addHandlerRender(controlRenderStats);
+  registerPersonalStatsView.addHandlerRender(controlRenderCurrentGoal);
+  registerPersonalStatsView.addHandlerRegister(controlRegisterPersonalStats);
+  graphStatsView.addHandlerRender(controlLoadStatsGraphs);
+  graphStatsView.addHandlerModifyGraph(controlLoadStatsGraphs);
 };
 
 // -----------------------------
 // Sidebar functionality
-
-let recipesViewInitiate = false;
-let mealsViewInitiate = false;
 
 const resetUrl = function (view) {
   history.pushState({ view: view }, '', view);
@@ -252,7 +297,6 @@ const resetUrl = function (view) {
     state: { view: view },
   });
   dispatchEvent(popStateEvent);
-  console.log(popStateEvent);
 };
 
 const renderBefore = function (viewClass, data = '') {

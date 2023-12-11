@@ -228,7 +228,7 @@
 }
 
 #form-meal-time {
-  select {
+  & select {
     display: inline-block;
     font-family: inherit;
     font-size: inherit;
@@ -236,6 +236,7 @@
     color: $color-grey-light-1;
     // height: 100%;
     // max-width: 30%;
+    width: 6vw;
     background-image: linear-gradient(to bottom right, #fbdb89, #f48982);
     border: none;
     font-weight: 700;
@@ -246,9 +247,9 @@
       background-color: $color-grad-2;
     }
   }
-  button {
+  & button {
     display: inline-block;
-    // width: 10rem;
+    width: 10rem;
     padding: 0.45rem;
     border-radius: 0.5rem;
     border: 1px solid transparent;

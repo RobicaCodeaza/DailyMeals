@@ -24,7 +24,7 @@ class AddMealsView extends View {
   }
 
   addHandlerRender(handler) {
-    ['load', 'popstate'].forEach(e =>
+    ['popstate'].forEach(e =>
       window.addEventListener(e, function (event) {
         handler();
       })

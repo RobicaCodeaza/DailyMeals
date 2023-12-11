@@ -13,14 +13,30 @@
   gap: 3.2rem;
   &__stat {
     background-color: $color-grey-light-2;
-    height: 100%;
+    // height: 100%;
+    cursor: pointer;
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 1.2rem;
-    padding: 0 2rem;
+    padding: 3rem;
     border-radius: 1.2rem;
+    border: 2px solid transparent;
+    transition: all 0.3s;
+    &--active {
+      border: 2px solid $color-grad-1;
+      .meal-stats__stat__icon-box {
+        background-color: $color-set2-primary-dark-3;
+      }
+    }
+    &:hover {
+      border: 2px solid rgba($color-grad-1, 0.65);
+      .meal-stats__stat__icon-box {
+        background-color: rgba($color-set2-primary-dark-3, 0.9);
+      }
+    }
+
     &__icon-box {
       background-color: $color-set2-primary-dark-2;
       border-radius: 1.2rem;
@@ -28,7 +44,7 @@
       align-items: center;
       justify-content: center;
       padding: 1rem;
-
+      transition: all 0.3s;
       // flex: 1 0 0;
       svg {
         width: 3.2rem;

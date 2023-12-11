@@ -99,4 +99,11 @@ export default class View {
     this._clear();
     this._parentElement.insertAdjacentHTML('afterbegin', markup);
   }
+  activateButton(btn, btnClass, classAdded) {
+    const allBtns = document.querySelectorAll(`.${btnClass}`);
+    btn.classList.add(`${classAdded}`);
+    allBtns.forEach(btnElse => {
+      if (btnElse !== btn) btnElse.classList.remove(`${classAdded}`);
+    });
+  }
 }

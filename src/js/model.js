@@ -41,9 +41,33 @@ export const state = {
   bookmarks: [],
   mealDaily: {
     day: '',
-    meals: { breakfast: [], lunch: [], dinner: [], snack: [] },
+    meals: {
+      breakfast: [],
+      lunch: [],
+      dinner: [],
+      snack: [],
+    },
   },
+  caloriesStats: [],
+  weightStats: [],
+  bodyFatStats: [],
+  proteinStats: [],
+  carbsStats: [],
+  fatsStats: [],
   meals: [],
+  personal: {
+    calCurrentGoal: '',
+    currentWeight: '',
+    goalWeight: '',
+    currentBodyFat: '',
+    goalBodyFat: '',
+    age: '',
+    height: '',
+    weekGoal: '',
+    activity: '',
+    currentWeightEvolution: [],
+    currentBodyFatEvolution: [],
+  },
   day: formatDayTimeStamp(),
 };
 const reconstructIngredients = function (ingredient) {
@@ -186,6 +210,9 @@ const persistBookmarks = function () {
 const persistMeals = function () {
   localStorage.setItem('meals', JSON.stringify(state.meals));
 };
+const persistPersonal = function () {
+  localStorage.setItem('personal', JSON.stringify(state.personal));
+};
 export const addBookmark = function (recipe) {
   // Add bookmark
   state.recipe.bookmarked = true;
@@ -227,21 +254,8 @@ export const deleteMeal = function (mealId, mealTime) {
   // Updating the state for meals of that day selected from calendar
   state.mealDaily = timeMeals;
   state.meals.push(state.mealDaily);
-  console.log(state.mealDaily);
   persistMeals();
 };
-
-const initiate = function () {
-  const storageBookmarks = localStorage.getItem('bookmarks');
-  if (storageBookmarks) state.bookmarks = JSON.parse(storageBookmarks);
-
-  const storageMeals = localStorage.getItem('meals');
-  if (storageMeals) state.meals = JSON.parse(storageMeals);
-
-  // if (state.meals.find(meal => (meal.day = state.day)))
-  //   state.mealDaily = state.meals.find(meal => (meal.day = state.day));
-};
-initiate();
 
 const clearBookmarks = function () {
   localStorage.clear('bookmarks');
@@ -250,6 +264,26 @@ const clearBookmarks = function () {
 const clearMeals = function () {
   localStorage.clear('meals');
 };
+// clearMeals();
+const clearPersonal = function () {
+  localStorage.clear('personal');
+};
+// clearPersonal();
+
+const initiate = function () {
+  const storageBookmarks = localStorage.getItem('bookmarks');
+  if (storageBookmarks) state.bookmarks = JSON.parse(storageBookmarks);
+
+  const storageMeals = localStorage.getItem('meals');
+  if (storageMeals) state.meals = JSON.parse(storageMeals);
+
+  const storagePersonal = localStorage.getItem('personal');
+  if (storagePersonal) state.personal = JSON.parse(storagePersonal);
+  // if (state.meals.find(meal => (meal.day = state.day)))
+  //   state.mealDaily = state.meals.find(meal => (meal.day = state.day));
+};
+initiate();
+
 export const uploadRecipe = async function (newRecipe) {
   try {
     const ingredients = Object.entries(newRecipe)
@@ -312,6 +346,7 @@ export const findMealDaily = function () {
 
 export const addMeal = async function () {
   try {
+    console.log('Entered Added');
     const fullNutrientRecipe = await createFullNutrientObject(state.recipe);
     fullNutrientRecipe.mealTime = state.mealTime;
     if (!state.mealDaily.added) {
@@ -330,38 +365,13 @@ export const addMeal = async function () {
   }
 };
 
-console.log(
-  +new Date(
-    new Date().getFullYear(),
-    new Date().getMonth(),
-    new Date().getDate()
-  )
-);
 const calcCaloriesPerMealTime = function (mealDaily = state.mealDaily) {
   const allMealsDaily = Object.values(mealDaily.meals);
-  console.log(allMealsDaily);
   const totals = allMealsDaily.map(mealTime =>
     mealTime.reduce((acc, meal) => {
-      return acc + Number(meal.calories.toFixed(0));
+      return acc + +meal.calories.toFixed(0);
     }, 0)
   );
-  return totals;
-};
-
-const calcNutrientsPerMealTime = function (
-  mealDaily = state.mealDaily,
-  nutrient = 'proteins'
-) {
-  const allMealsDaily = Object.values(mealDaily.meals);
-  console.log(allMealsDaily);
-  const totals = allMealsDaily.reduce((acc, mealTime) => {
-    return (
-      acc +
-      mealTime.reduce((accumulator, meal) => {
-        return accumulator + meal[nutrient];
-      }, 0)
-    );
-  }, 0);
   return totals;
 };
 
@@ -379,6 +389,149 @@ const calcAvgCaloriesPerMealtime = function () {
     return avgCaloriesPerMealType.toFixed(0);
   });
   return calories;
+};
+
+const calcNutrientsPerDay = function (
+  nutrient = 'proteins',
+  mealDaily = state.mealDaily
+) {
+  const allMealsDaily = Object.values(mealDaily.meals);
+  const totals = allMealsDaily.reduce((acc, mealTime) => {
+    return (
+      acc +
+      mealTime.reduce((accumulator, meal) => {
+        return accumulator + meal[nutrient];
+      }, 0)
+    );
+  }, 0);
+  return totals.toFixed(0);
+};
+
+const calcAvgNutrientsPerDay = function (nutrient) {
+  const numberOfMealsRegistered = state.meals.reduce((acc, mealDaily) => {
+    return (
+      acc +
+      Object.values(mealDaily.meals).reduce((accumulator, mealTime) => {
+        if (mealTime.length > 0) {
+          return accumulator + mealTime.length;
+        } else {
+          return accumulator + 0;
+        }
+      }, 0)
+    );
+  }, 0);
+  const totals = state.meals.reduce((acc, mealDaily) => {
+    return (
+      acc + calcNutrientsPerDay(nutrient, mealDaily) / numberOfMealsRegistered
+    );
+  }, 0);
+  return totals.toFixed();
+};
+
+export const calcMealDailyStats = function () {
+  state.mealDaily.totalCalories = calcCaloriesPerMealTime().reduce(
+    (calories, calPerMealTime) => calories + calPerMealTime,
+    0
+  );
+  state.mealDaily.totalProteins = calcNutrientsPerDay('proteins');
+  state.mealDaily.totalCarbs = calcNutrientsPerDay('carbs');
+  state.mealDaily.totalFats = calcNutrientsPerDay('fats');
+
+  const indexMealDaily = state.meals.findIndex(
+    mealDaily => mealDaily.day === state.mealDaily.day
+  );
+
+  // Deleting from state too
+  if (indexMealDaily >= 0) {
+    console.log('calc Meal Daily STATS');
+    state.meals.splice(indexMealDaily, 1);
+    state.meals.push(state.mealDaily);
+    persistMeals();
+  }
+};
+// calcMealDailyStats();
+
+const calcCurrentGoal = function (data) {
+  // Using Katch-McARDLE Formula
+  const kcalPerKg = 7700;
+  const maintainingCal =
+    370 +
+    21.6 * (1 - +data.currentBodyFat / 100) * +data.currentWeight +
+    +(Number.parseFloat(data.activity)
+      ? (Number.parseFloat(data.activity) * kcalPerKg) / 7
+      : 0);
+  const currentGoalCal =
+    maintainingCal +
+    (Number.parseFloat(data.weekGoal)
+      ? (Number.parseFloat(data.weekGoal) * kcalPerKg) / 7
+      : 0);
+  return currentGoalCal.toFixed(0);
+};
+export const findPersonalStatsForDay = function () {
+  const indexOfWeight = state.personal.currentWeightEvolution.findIndex(
+    currentWeight => currentWeight.day === state.day
+  );
+  if (indexOfWeight != -1)
+    state.personal.currentWeight =
+      state.personal.currentWeightEvolution[indexOfWeight].currentWeight;
+  else
+    state.personal.currentWeight = state.personal.currentWeightEvolution
+      .sort(sortDesc)
+      .find(weight => weight.day < state.day)?.currentWeight;
+
+  const indexOfBodyFat = state.personal.currentBodyFatEvolution.findIndex(
+    currentBodyFat => currentBodyFat.day === state.day
+  );
+
+  if (indexOfBodyFat != -1)
+    state.personal.currentBodyFat =
+      state.personal.currentBodyFatEvolution[indexOfBodyFat].currentBodyFat;
+  else
+    state.personal.currentBodyFat = state.personal.currentBodyFatEvolution
+      .sort(sortDesc)
+      .find(bodyFat => bodyFat.day < state.day)?.currentBodyFat;
+
+  persistPersonal();
+};
+export const addPersonalStats = function (data) {
+  state.personal.calCurrentGoal = calcCurrentGoal(data);
+  state.personal.currentWeight = data.currentWeight;
+  state.personal.goalWeight = data.goalWeight;
+  state.personal.currentBodyFat = data.currentBodyFat;
+  state.personal.goalBodyFat = data.goalBodyFat;
+  state.personal.age = data.age;
+  state.personal.height = data.height;
+  state.personal.weekGoal = data.weekGoal;
+  state.personal.activity = data.activity;
+
+  // Finding existing weight
+  const indexOfWeight = state.personal.currentWeightEvolution.findIndex(
+    currentWeight => currentWeight.day === state.day
+  );
+  console.log(indexOfWeight);
+  const currentWeightObj = {
+    day: state.day,
+    currentWeight: data.currentWeight,
+  };
+  if (indexOfWeight != -1) {
+    state.personal.currentWeightEvolution.splice(indexOfWeight, 1);
+  }
+  state.personal.currentWeightEvolution.push(currentWeightObj);
+
+  // Finding existing bodyfat
+  const indexOfBodyFat = state.personal.currentBodyFatEvolution.findIndex(
+    currentBodyFat => currentBodyFat.day === state.day
+  );
+  const currentBodyFatObj = {
+    day: state.day,
+    currentBodyFat: data.currentBodyFat,
+  };
+  if (indexOfBodyFat != -1)
+    state.personal.currentBodyFatEvolution.splice(indexOfBodyFat, 1);
+  state.personal.currentBodyFatEvolution.push(currentBodyFatObj);
+
+  console.log(state.personal);
+  persistPersonal();
 };
 
 const loadImage = async function (el, imgPath) {
@@ -413,10 +566,10 @@ const createGraphGeneral = function (
           pointHoverRadius: 3,
           pointStyle: 'circle',
           borderDash: [0, 0],
-          barPercentage: 0.9,
+          barPercentage: 0.8,
           categoryPercentage: 0.8,
           data: datasets,
-          label: 'Dataset 1',
+          // label: 'Dataset 1',
           borderColor: '#0b2866',
           backgroundColor: backgroundColors,
           borderWidth: 5,
@@ -483,10 +636,10 @@ const createGraphGeneral = function (
       startAngle: -1.5707963267948966,
     },
   });
-  qc.setWidth(600).setHeight(300).setBackgroundColor('#0b2866');
+  qc.setWidth(625).setHeight(300).setBackgroundColor('#0b2866');
 };
 
-export const loadGraph = async function (graphType) {
+export const loadGeneralGraph = async function (graphType) {
   try {
     if (graphType.includes('general')) {
       if (graphType.includes('calories')) {
@@ -520,12 +673,17 @@ export const loadGraph = async function (graphType) {
         if (graphType.includes('day')) {
           title = 'Nutrients(g) - Current day';
           datasets = [
-            calcNutrientsPerMealTime(state.mealDaily, 'proteins').toFixed(0),
-            calcNutrientsPerMealTime(state.mealDaily, 'carbs').toFixed(0),
-            calcNutrientsPerMealTime(state.mealDaily, 'fats').toFixed(0),
+            calcNutrientsPerDay('proteins'),
+            calcNutrientsPerDay('carbs'),
+            calcNutrientsPerDay('fats'),
           ];
         } else {
           title = 'Nutrients(g) - Average';
+          datasets = [
+            calcAvgNutrientsPerDay('proteins'),
+            calcAvgNutrientsPerDay('carbs'),
+            calcAvgNutrientsPerDay('fats'),
+          ];
         }
         createGraphGeneral(
           type,
@@ -538,8 +696,336 @@ export const loadGraph = async function (graphType) {
       }
     }
     const url = await qc.getUrl();
-    const img = document.querySelector('.graph__img');
+    const img = document.querySelector('#img-graph-general-splits');
     await loadImage(img, url);
+  } catch (err) {
+    throw err;
+  }
+};
+
+const createGraphStats = function (
+  dataset,
+  dateSeries,
+  title,
+  targetSeries = undefined,
+  datasetColor = '#ff5a00'
+) {
+  qc.setConfig({
+    type: 'line',
+    data: {
+      datasets: [
+        {
+          label: `${title}/day`,
+          data: dataset,
+          fill: false,
+          borderColor: datasetColor,
+          spanGaps: false,
+          lineTension: 0.4,
+          pointRadius: 7,
+          pointHoverRadius: 10,
+          pointStyle: 'circle',
+          borderDash: [0, 0],
+          barPercentage: 0.5,
+          categoryPercentage: 0.5,
+          type: 'line',
+          backgroundColor: '#fbdb89',
+          borderWidth: 3,
+          hidden: false,
+        },
+        {
+          label: targetSeries ? 'Current Goal' : '',
+          data: targetSeries ? targetSeries : '',
+          fill: false,
+          borderColor: targetSeries ? '#fbdb89' : '#0b2866',
+          lineTension: 0,
+          pointRadius: 0,
+          pointHoverRadius: 0,
+          pointStyle: 'circle',
+          borderDash: [20, 20],
+          categoryPercentage: 0.8,
+          type: 'line',
+          borderWidth: 2,
+          hidden: targetSeries ? false : true,
+          yAxisID: 'Y1',
+        },
+      ],
+      labels: dateSeries,
+    },
+    options: {
+      title: {
+        display: true,
+        position: 'top',
+        fontSize: 16,
+        fontFamily: 'doris',
+        fontColor: '#e8f0ff',
+        fontStyle: 'bold',
+        padding: 0,
+        lineHeight: 1,
+        text: title,
+      },
+      layout: {
+        padding: {
+          left: 25,
+          right: 25,
+          bottom: 25,
+          top: 25,
+        },
+      },
+      legend: {
+        display: true,
+        position: 'top',
+        align: 'center',
+        fullWidth: true,
+        reverse: false,
+        labels: {
+          fontSize: 13,
+          fontFamily: 'doris',
+          fontColor: '#bbd1ff',
+          fontStyle: 'italic',
+          padding: 15,
+        },
+      },
+      scales: {
+        xAxes: [
+          {
+            id: 'X1',
+            display: true,
+            position: 'bottom',
+            type: 'time',
+            stacked: false,
+            offset: true,
+            time: {
+              unit: 'day',
+              stepSize: 4,
+              displayFormats: {
+                day: 'DD/MM/YYYY',
+              },
+            },
+            distribution: 'series',
+            gridLines: {
+              display: true,
+              color: '#113d99',
+              borderDash: [0, 0],
+              lineWidth: 2.5,
+              drawBorder: true,
+              drawOnChartArea: true,
+              drawTicks: true,
+              tickMarkLength: 10,
+              zeroLineWidth: 0,
+              zeroLineColor: 'rgba(0, 0, 0, 0.25)',
+              zeroLineBorderDash: [1, 1],
+            },
+            // angleLines: {
+            //   display: true,
+            //   color: 'rgba(0, 0, 0, 0.1)',
+            //   borderDash: [0, 0],
+            //   lineWidth: 1,
+            // },
+            // pointLabels: {
+            //   display: false,
+            //   fontColor: '#666',
+            //   fontSize: 15,
+            //   fontStyle: 'normal',
+            // },
+            ticks: {
+              display: true,
+              fontSize: 12,
+              fontFamily: 'doris',
+              fontColor: '#bbd1ff',
+              fontStyle: 'italic',
+              padding: 10,
+              stepSize: null,
+              minRotation: 0,
+              maxRotation: 50,
+              mirror: false,
+              reverse: false,
+            },
+          },
+        ],
+        yAxes: [
+          {
+            id: 'Y1',
+            display: true,
+            position: 'left',
+            type: 'linear',
+            stacked: false,
+            offset: false,
+            time: {
+              unit: false,
+            },
+            distribution: 'linear',
+            gridLines: {
+              display: true,
+              color: '#113d99',
+              borderDash: [0, 0],
+              lineWidth: 0.5,
+              drawBorder: true,
+              drawOnChartArea: true,
+              drawTicks: true,
+              tickMarkLength: 10,
+              zeroLineWidth: 1,
+              zeroLineColor: 'rgba(0, 0, 0, 0.25)',
+              zeroLineBorderDash: [0, 0],
+            },
+            // angleLines: {
+            //   display: true,
+            //   color: 'rgba(0, 0, 0, 0.1)',
+            //   borderDash: [0, 0],
+            //   lineWidth: 1,
+            // },
+            // ticks: {
+            //   display: true,
+            //   fontSize: 14,
+            //   fontFamily: 'doris',
+            //   fontColor: '#bbd1ff',
+            //   fontStyle: 'normal',
+            //   padding: 10,
+            //   stepSize: null,
+            //   minRotation: 0,
+            //   maxRotation: 50,
+            //   mirror: false,
+            //   reverse: false,
+            // },
+            // scaleLabel: {
+            //   display: false,
+            //   labelString: 'Axis label',
+            //   lineHeight: 1.2,
+            //   fontColor: '#666666',
+            //   fontFamily: 'sans-serif',
+            //   fontSize: 20,
+            //   fontStyle: 'normal',
+            //   padding: 4,
+            // },
+          },
+          {
+            id: 'Y2',
+            display: false,
+            position: 'right',
+            type: 'linear',
+            stacked: false,
+            offset: false,
+          },
+        ],
+      },
+      plugins: {
+        datalabels: {
+          display: false,
+          align: 'center',
+          anchor: 'center',
+          backgroundColor: '#eee',
+          borderColor: '#ddd',
+          borderRadius: 6,
+          borderWidth: 1,
+          padding: 4,
+          color: '#666666',
+          font: {
+            family: 'sans-serif',
+            size: 10,
+            style: 'normal',
+          },
+        },
+        datalabelsZAxis: {
+          enabled: false,
+        },
+        googleSheets: {},
+        airtable: {},
+        tickFormat: '',
+      },
+      cutoutPercentage: 50,
+      rotation: -1.5707963267948966,
+      circumference: 6.283185307179586,
+      startAngle: -1.5707963267948966,
+    },
+  });
+  qc.setWidth(725).setHeight(300).setBackgroundColor('#0b2866');
+};
+
+function transformTitle(word) {
+  return word
+    .split(/(?=[A-Z])/)
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1));
+}
+function sortDesc(a, b) {
+  (a, b) => {
+    return b.day - a.day;
+  };
+}
+export const loadStatsGraph = async function (
+  graphType = 'totalCalories',
+  color,
+  days = 7
+) {
+  try {
+    console.log(graphType);
+    const dayStart = state.day - (days - 1) * 1000 * 60 * 60 * 24;
+    const title = transformTitle(graphType);
+    let targetSeries = '';
+    const daysPeriod = Array.from({ length: days }, (arr, currentIndex) => {
+      return dayStart + currentIndex * 1000 * 60 * 60 * 24;
+    });
+    const daysPeriodFormatedForApi = daysPeriod.map(
+      day => day + 1000 * 60 * 60 * 24
+    );
+    let allDays;
+    if (graphType.includes('total')) {
+      allDays = Array.from(
+        { length: days },
+        (_, currentIndex) =>
+          state.meals.find(
+            mealDaily => mealDaily.day === daysPeriod[currentIndex]
+          )?.[graphType] ?? 0
+      );
+
+      if (graphType.includes('Calories'))
+        targetSeries = Array.from(
+          { length: days },
+          () => state.personal.calCurrentGoal
+        );
+    }
+    if (graphType.includes('current')) {
+      allDays = Array.from(
+        { length: days },
+        (_, currentIndex) =>
+          state.personal[`${graphType}Evolution`].find(
+            type => type.day === daysPeriod[currentIndex]
+          )?.[graphType] ?? 0
+      );
+      allDays.forEach((day, index, array) => {
+        if (day === 0)
+          array[index] = array
+            .slice(index === 0 ? 0 : index - 1)
+            .find(dayValue => dayValue > 0);
+        if (array[index] === undefined) {
+          state.personal[`${graphType}Evolution`].sort(sortDesc);
+          array[index] = state.personal[`${graphType}Evolution`].find(
+            type => type?.day < state.day
+          )?.[graphType];
+        }
+      });
+      if (graphType.includes('Weight'))
+        targetSeries = Array.from(
+          { length: days },
+          () => state.personal.goalWeight
+        );
+      if (graphType.includes('BodyFat'))
+        targetSeries = Array.from(
+          { length: days },
+          () => state.personal.goalBodyFat
+        );
+    }
+
+    createGraphStats(
+      allDays,
+      daysPeriodFormatedForApi,
+      title[1],
+      targetSeries,
+      color
+    );
+
+    const img = document.querySelector('#img-graph-stats');
+    const url = await qc.getUrl();
+    console.log(url);
+    img ? await loadImage(img, url) : '';
   } catch (err) {
     throw err;
   }
