@@ -1,12 +1,20 @@
 @use '../../abstracts/' as *;
 
 .register-personal-stats {
+  align-self: center;
   border-radius: 1.5rem;
   padding: 2rem;
   background-color: $color-set2-primary-dark-2;
-  grid-area: registerP;
+  grid-column: 2/3;
+  grid-row: 2/3;
   &--active {
     // grid-row: registerP/graphS;
+  }
+  @include respond(smallest-laptop) {
+    grid-column: 1/2;
+  }
+  @include respond(tab-land) {
+    grid-column: 1 / span 2;
   }
 }
 
@@ -19,6 +27,13 @@
   text-align: center;
   align-items: center;
   border-radius: 1.2rem;
+
+  @include respond(smallest-laptop) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  @include respond(tab-land) {
+    // grid-template-columns: (2, 1fr);
+  }
 }
 
 .input-box {
@@ -100,6 +115,9 @@
     transform: translateY(-0.1rem);
     box-shadow: 0.2rem 0.4rem 0.4rem rgba(#000, 0.2);
   }
+  @include respond(smallest-laptop) {
+    grid-column: 3/4;
+  }
 }
 
 .btn--set {
@@ -136,5 +154,8 @@
     margin-left: 0.25rem;
     color: $color-grad-1;
     font-weight: 700;
+  }
+  @include respond(smallest-laptop) {
+    grid-column: 1 / span 2;
   }
 }

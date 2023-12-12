@@ -1,3 +1,11 @@
 .display-none {
   display: none !important;
 }
+.not-visible {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+.translated-y-100 {
+  transform: translateY(-100%);
+}

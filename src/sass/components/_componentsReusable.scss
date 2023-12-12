@@ -238,6 +238,9 @@
   padding: 1rem 6rem;
   color: $color-set2-primary-dark-3;
   font-weight: 500;
+  @include respond(tab-port) {
+    padding: 0.5rem 8rem;
+  }
   &__date {
     font-size: 1.8rem;
   }

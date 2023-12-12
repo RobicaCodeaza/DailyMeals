@@ -319,7 +319,7 @@ const controlMenu = function (view = 'MealsDashboardView') {
 };
 controlMenu(window.location.toString());
 sidebarView.addHandlerRender(controlMenu);
-
+sidebarView.addHandlerMenuOpen();
 //http://localhost:1234/RecipesView#680975
 
 // const graphGeneral = document.querySelector('.graph--general');

@@ -6,6 +6,44 @@ export default class SidebarView extends View {
   _parentElement = document.querySelector('.current-view');
   _sidebar = document.querySelector('.sidebar__nav');
   _allMenuBtns = Array.from(document.querySelectorAll('.buttonMenu'));
+  constructor() {
+    super();
+    this.matchMediaTabPort();
+    window.addEventListener('resize', this.matchMediaTabPort.bind(this));
+  }
+  matchMediaTabPort() {
+    const tabPortMedia = window.matchMedia('(max-width: 56.25em)');
+
+    if (tabPortMedia.matches) {
+      //Hiding sidebar for phone functionality
+      this._sidebar
+        .querySelectorAll('.to-be-hidden')
+        ?.forEach(el =>
+          !this._sidebar.classList.contains('sidebar__nav--active')
+            ? el.classList.add(
+                'display-none',
+                'not-visible',
+                'translated-y-100'
+              )
+            : ''
+        );
+
+      const menuOpen = document.querySelector('.sidebar__nav__btn--open');
+      menuOpen.classList.remove('display-none');
+    } else {
+      //Sidebar fully visible
+      this._sidebar
+        .querySelectorAll('.to-be-hidden')
+        ?.forEach(el =>
+          el.classList.remove('display-none', 'not-visible', 'translated-y-100')
+        );
+
+      const menuOpen = document.querySelector('.sidebar__nav__btn--open');
+      menuOpen.classList.add('display-none');
+
+      this._sidebar.classList.remove('sidebar__nav--active');
+    }
+  }
   addHandlerRender(handler) {
     this._sidebar.addEventListener(
       'click',
@@ -18,9 +56,29 @@ export default class SidebarView extends View {
             btn.classList.remove('sidebar__nav__btn--active');
           }
         });
+        this.toggleMenuVisibilty();
         handler(btnClicked.id);
       }.bind(this)
     );
+  }
+  toggleMenuVisibilty() {
+    const elementsMenu = this._sidebar.querySelectorAll('.to-be-hidden');
+    elementsMenu.forEach(el => {
+      el.classList.toggle('display-none');
+      el.classList.toggle('translated-y-100');
+      el.classList.toggle('not-visible');
+
+      console.log(el);
+    });
+
+    this._sidebar.classList.contains('sidebar__nav--active')
+      ? this._sidebar.classList.remove('sidebar__nav--active')
+      : this._sidebar.classList.add('sidebar__nav--active');
+  }
+  addHandlerMenuOpen() {
+    const menuOpen = document.querySelector('.sidebar__nav__btn--open');
+
+    menuOpen?.addEventListener('click', this.toggleMenuVisibilty.bind(this));
   }
 
   _generateMarkup() {
@@ -313,7 +371,7 @@ export default class SidebarView extends View {
           <div class="graph graph--general">
             <img
               alt="General Graph Img"
-              class="graph__img"
+              class="graph__img "
               id="img-graph-general-splits"
             />
           </div>

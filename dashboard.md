@@ -1,4 +1,4 @@
-        <div class="container container--dashboard">
+    <div class="container container--dashboard">
           <header class="header header--main">
             <div class="header--main__date">22.11.2023</div>
             <div class="header--main__welcome">
@@ -151,9 +151,41 @@
                 </tbody>
               </table>
             </div>
-            <div class="graph graph--calories">Graph1</div>
-            <div class="graph graph--nutrients">Graph2</div>
-            <div class="graph graph--general">Graph3</div>
+            <div class="general-splits">
+              <div class="graph graph--general">
+                <img
+                  alt="General Graph Img"
+                  class="graph--img"
+                  id="img-graph-general-splits"
+                />
+              </div>
+
+              <ul class="general-splits__control">
+                <li
+                  class="general-splits__control__item general-splits__control__item--active"
+                >
+                  <button class="btn--control" id="day-calories-split">
+                    CALORIES(day)
+                  </button>
+                </li>
+                <li class="general-splits__control__item">
+                  <button class="btn--control" id="day-nutrients-split">
+                    NUTRIENTS(day)
+                  </button>
+                </li>
+                <li class="general-splits__control__item">
+                  <button class="btn--control" id="all-calories-split">
+                    CALORIES(days)
+                  </button>
+                </li>
+                <li class="general-splits__control__item">
+                  <button class="btn--control" id="all-nutrients-split">
+                    NUTRIENTS(days)
+                  </button>
+                </li>
+              </ul>
+            </div>
+
             <div class="register-personal-stats">
               <form class="register-form" action="#">
                 <div class="input-box">
@@ -171,7 +203,7 @@
 
                 <div class="input-box">
                   <label for="goal-weight"
-                    >Goal Weight <strong>(kg)</strong></label
+                    >Weight Goal <strong>(kg)</strong></label
                   >
                   <input
                     type="number"
@@ -196,8 +228,8 @@
                 </div>
 
                 <div class="input-box">
-                  <label for="goal-body-fat"
-                    >Goal Body Fat <strong>(%)</strong></label
+                  <label for="goal-body-fat">
+                    Body Fat Goal<strong>(%)</strong></label
                   >
                   <input
                     type="number"
@@ -207,7 +239,79 @@
                     placeholder="15%"
                   />
                 </div>
-                <button class="btn--form" type="submit">Register</button>
+                <div class="input-box">
+                  <button class="btn--set" id="btn-set">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="32"
+                      height="32"
+                      fill="#000000"
+                      viewBox="0 0 256 256"
+                    >
+                      <path
+                        d="M213.66,101.66l-80,80a8,8,0,0,1-11.32,0l-80-80A8,8,0,0,1,53.66,90.34L128,164.69l74.34-74.35a8,8,0,0,1,11.32,11.32Z"
+                      ></path>
+                    </svg>
+                  </button>
+                </div>
+                <div class="input-box display-none" id="hidden">
+                  <label for="age">Age<strong></strong></label>
+                  <input
+                    type="number"
+                    name="age"
+                    id="age"
+                    required
+                    placeholder="43"
+                  />
+                </div>
+                <div class="input-box display-none" id="hidden">
+                  <label for="height">Height<strong>(cm)</strong></label>
+                  <input
+                    type="number"
+                    name="height"
+                    id="height"
+                    required
+                    placeholder="178"
+                  />
+                </div>
+                <div class="input-box display-none" id="hidden">
+                  <label for="actual-goal"
+                    >Weight Goal(per week)<strong></strong
+                  ></label>
+                  <select name="actual-goal" id="actual-goal" required>
+                    <option value="">Choose goal</option>
+                    <option value="-0.25kg">Lose (0.25kg)</option>
+                    <option value="-0.5kg">Lose (0.5kg)</option>
+                    <option value="-1kg">Lose (1kg)</option>
+                    <option value="+0.25kg">Gain (0.25kg)</option>
+                    <option value="+0.5kg">Gain (0.5kg)</option>
+                    <option value="+1kg">Gain (1kg)</option>
+                    <option value="maintain">Maintain</option>
+                  </select>
+                </div>
+
+                <div class="input-box display-none" id="hidden">
+                  <label for="actual-goal">Activity<strong></strong></label>
+                  <select name="actual-goal" id="actual-goal" required>
+                    <option value="">Choose activity</option>
+                    <option value="-0.2kg">
+                      Daily exercise, or intense exercise 3-4 times per week
+                    </option>
+                    <option value="-0.6kg">
+                      Intense exercise 6-7 times per week
+                    </option>
+                    <option value="-1kg">
+                      Very intense exercise daily, or a highly physical job
+                    </option>
+                  </select>
+                </div>
+                <button
+                  class="btn--form display-none"
+                  type="submit"
+                  id="hidden"
+                >
+                  Register
+                </button>
               </form>
             </div>
             <div class="graph graph--stats">Graph Stats</div>

@@ -1,27 +1,55 @@
 @use '../abstracts/' as *;
 
 .sidebar__nav {
-  padding: 2.4rem 2.4rem 4.8rem 2.4rem;
+  padding: 1.5rem 2dvw 3dvw 2dvw;
+
   &__logo {
     width: auto;
     height: 4rem;
     object-fit: contain;
     margin-bottom: 2.4rem;
+    @include respond(tab-port) {
+      margin-bottom: 0;
+      width: 8.5rem;
+      object-fit: cover;
+    }
   }
 
   &__list {
+    margin-top: 1.2rem;
     list-style: none;
-    &__item {
-      padding: 1.2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2.4rem;
+
+    @include respond(tab-port) {
+      flex-direction: row;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-top: 0;
+      gap: 2rem;
+    }
+    @include respond(phone) {
+      flex-direction: column;
     }
   }
   &__main {
     flex: 0 0 70%;
     border-bottom: 1px solid $color-set2-primary-dark-2;
+    @include respond(tab-port) {
+      border: none;
+      flex: 0 0 auto;
+      margin-left: auto;
+    }
   }
   &__profile {
     margin-top: auto;
     // flex: 1;
+    @include respond(tab-port) {
+      margin-top: 0;
+      margin-right: auto;
+      margin-left: auto;
+    }
   }
   &__btn {
     width: 100%;
@@ -73,6 +101,22 @@
         svg {
           fill: $color-grad-1;
         }
+      }
+    }
+
+    @include respond(tab-port) {
+      padding: 1rem 1.5rem;
+      width: 14rem;
+    }
+
+    &--open {
+      width: 3.5rem;
+      z-index: 2;
+      background-size: 250%;
+      margin-right: 2.5rem;
+      padding: 0.5rem;
+      .sidebar__nav__btn__icon {
+        margin-right: 0;
       }
     }
   }

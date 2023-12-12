@@ -636,7 +636,7 @@ const createGraphGeneral = function (
       startAngle: -1.5707963267948966,
     },
   });
-  qc.setWidth(625).setHeight(300).setBackgroundColor('#0b2866');
+  qc.setWidth(615).setHeight(305).setBackgroundColor('#0b2866');
 };
 
 export const loadGeneralGraph = async function (graphType) {
@@ -815,18 +815,6 @@ const createGraphStats = function (
               zeroLineColor: 'rgba(0, 0, 0, 0.25)',
               zeroLineBorderDash: [1, 1],
             },
-            // angleLines: {
-            //   display: true,
-            //   color: 'rgba(0, 0, 0, 0.1)',
-            //   borderDash: [0, 0],
-            //   lineWidth: 1,
-            // },
-            // pointLabels: {
-            //   display: false,
-            //   fontColor: '#666',
-            //   fontSize: 15,
-            //   fontStyle: 'normal',
-            // },
             ticks: {
               display: true,
               fontSize: 12,
@@ -867,35 +855,6 @@ const createGraphStats = function (
               zeroLineColor: 'rgba(0, 0, 0, 0.25)',
               zeroLineBorderDash: [0, 0],
             },
-            // angleLines: {
-            //   display: true,
-            //   color: 'rgba(0, 0, 0, 0.1)',
-            //   borderDash: [0, 0],
-            //   lineWidth: 1,
-            // },
-            // ticks: {
-            //   display: true,
-            //   fontSize: 14,
-            //   fontFamily: 'doris',
-            //   fontColor: '#bbd1ff',
-            //   fontStyle: 'normal',
-            //   padding: 10,
-            //   stepSize: null,
-            //   minRotation: 0,
-            //   maxRotation: 50,
-            //   mirror: false,
-            //   reverse: false,
-            // },
-            // scaleLabel: {
-            //   display: false,
-            //   labelString: 'Axis label',
-            //   lineHeight: 1.2,
-            //   fontColor: '#666666',
-            //   fontFamily: 'sans-serif',
-            //   fontSize: 20,
-            //   fontStyle: 'normal',
-            //   padding: 4,
-            // },
           },
           {
             id: 'Y2',
@@ -937,7 +896,7 @@ const createGraphStats = function (
       startAngle: -1.5707963267948966,
     },
   });
-  qc.setWidth(725).setHeight(300).setBackgroundColor('#0b2866');
+  qc.setWidth(800).setHeight(265).setBackgroundColor('#0b2866');
 };
 
 function transformTitle(word) {

@@ -1,13 +1,23 @@
 @use '../../abstracts/' as *;
 
 %graph {
+  position: relative;
+  // overflow: scroll;
   height: 100%;
   width: 100%;
-  position: relative;
-  overflow: hidden;
 }
 .graph {
   @extend %graph;
+
+  &--general {
+    background-color: aqua;
+    @include respond(smallest-laptop) {
+      height: 28rem;
+    }
+    @include respond(tab-land) {
+      height: 35rem;
+    }
+  }
   &__img {
     transition: all 0.4s;
     position: absolute;
@@ -23,18 +33,41 @@
 .general-splits {
   grid-area: graphG;
   // grid-column: 2 / span 2;
+
   display: flex;
   gap: 3.2rem;
   align-items: center;
-  height: 100%;
-  width: 100%;
+  // height: 100%;
+  // width: 100%;
+  padding: 3rem 0;
+
+  grid-column: 2/3;
+  grid-row: 1/2;
+
+  @include respond(smallest-laptop) {
+    flex-direction: column;
+
+    grid-row: 2 / 3;
+    grid-column: 2 / 3;
+  }
+  @include respond(tab-land) {
+    grid-row: 3/4;
+    grid-column: 1 / span 2;
+  }
 
   &__control {
     list-style: none;
     display: flex;
     flex-direction: column;
     gap: 2.4rem;
-
+    @include respond(smallest-laptop) {
+      flex-direction: row;
+      // justify-content: space-around;
+    }
+    @include respond(tab-port) {
+      flex-wrap: wrap;
+      justify-content: space-around;
+    }
     &__item {
       height: 4rem;
       width: 15rem;
@@ -43,5 +76,15 @@
 }
 
 .graph--stats {
-  grid-area: graphS;
+  grid-column: 2/3;
+  grid-row: 3/4;
+  @include respond(smallest-laptop) {
+    grid-column: 2/3;
+  }
+  @include respond(tab-land) {
+    background-color: aqua;
+    grid-row: 5/6;
+    height: 35rem;
+    grid-column: 1 / span 2;
+  }
 }
