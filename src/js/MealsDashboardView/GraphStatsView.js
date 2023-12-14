@@ -1,4 +1,4 @@
-import View from '../View';
+import View from '../views/View';
 
 export default class GraphStatsView extends View {
   _parentElement = document.querySelector('#img-graph-stats');

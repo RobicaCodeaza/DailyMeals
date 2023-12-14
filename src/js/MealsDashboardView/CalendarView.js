@@ -1,5 +1,5 @@
 import * as datedreamer from 'datedreamer';
-import View from '../View';
+import View from '../views/View';
 
 export default class CalendarView extends View {
   _parentElement = '#calendar';

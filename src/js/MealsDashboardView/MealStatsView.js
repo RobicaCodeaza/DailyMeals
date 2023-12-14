@@ -1,4 +1,4 @@
-import View from '../View';
+import View from '../views/View';
 
 export default class MealStatsView extends View {
   _parentElement = document.querySelector('.meal-stats');

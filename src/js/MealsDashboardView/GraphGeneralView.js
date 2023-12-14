@@ -1,4 +1,4 @@
-import View from '../View';
+import View from '../views/View';
 
 export default class GraphGeneralView extends View {
   _parentElement = document.querySelector('#img-graph-general-splits');

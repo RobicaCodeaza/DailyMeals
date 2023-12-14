@@ -1,4 +1,4 @@
-import View from '../View';
+import View from '../views/View';
 export default class RegisterMealStatsView extends View {
   _parentElement = document.querySelector('.register-form');
   _btnSet = document.querySelector('#btn-set');

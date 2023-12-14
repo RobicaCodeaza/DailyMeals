@@ -5,12 +5,12 @@ import 'core-js/actual'; // Polyfilling everything else
 
 // Importing RecipesViewDashboard
 
-import RecipeView from './views/RecipesView/recipeView';
-import SearchView from './views/RecipesView/searchView';
-import ResultsView from './views/RecipesView/resultsView';
-import PaginationView from './views/RecipesView/paginationView';
-import BookmarksView from './views/RecipesView/bookmarksView';
-import AddRecipeView from './views/RecipesView/addRecipeView';
+import RecipeView from './RecipesView/recipeView';
+import SearchView from './RecipesView/searchView';
+import ResultsView from './RecipesView/resultsView';
+import PaginationView from './RecipesView/paginationView';
+import BookmarksView from './RecipesView/bookmarksView';
+import AddRecipeView from './RecipesView/addRecipeView';
 
 let bookmarksView,
   recipeView,
@@ -20,12 +20,12 @@ let bookmarksView,
   resultsView;
 
 // Importing MealsDashboardView
-import CalendarView from './views/MealsDashboardView/CalendarView';
-import AddMealsView from './views/MealsDashboardView/AddMealsView';
-import GraphGeneralView from './views/MealsDashboardView/GraphGeneralView';
-import RegisterPersonalStatsView from './views/MealsDashboardView/RegisterPersonalStatsView';
-import MealStatsView from './views/MealsDashboardView/MealStatsView';
-import GraphStatsView from './views/MealsDashboardView/GraphStatsView';
+import CalendarView from './MealsDashboardView/CalendarView';
+import AddMealsView from './MealsDashboardView/AddMealsView';
+import GraphGeneralView from './MealsDashboardView/GraphGeneralView';
+import RegisterPersonalStatsView from './MealsDashboardView/RegisterPersonalStatsView';
+import MealStatsView from './MealsDashboardView/MealStatsView';
+import GraphStatsView from './MealsDashboardView/GraphStatsView';
 
 let calendarView,
   addMealsView,

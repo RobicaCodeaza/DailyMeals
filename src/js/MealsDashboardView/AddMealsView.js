@@ -1,5 +1,5 @@
 // import { values } from 'core-js/core/array';
-import View from '../View';
+import View from '../views/View';
 // import timeMeals from './TimeMealsView';
 
 class AddMealsView extends View {
