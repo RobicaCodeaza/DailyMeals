@@ -5,12 +5,13 @@ const qc = new QuickChart();
 
 import {
   RES_PER_PAGE,
+  setRES_PER_PAGE,
   KEY_GET,
   API_URL_GET,
   API_URL_UPLOAD,
   KEY_UPLOAD,
 } from './config';
-// import { getJSON, sendJSON } from './helpers';
+
 import { AJAX } from './helpers';
 
 import dayjs from 'dayjs';
@@ -29,7 +30,72 @@ const formatDayTimeStamp = function (date) {
       new Date().getDate()
     );
 };
+const reconstructIngredients = function (ingredient) {
+  return {
+    id: +ingredient.id,
+    amount: +ingredient.measures.us.amount,
+    unit: ingredient.measures.us.unitLong,
+    name: ingredient.name,
+    text: ingredient.original,
+  };
+};
+const createRecipeObject = function (data) {
+  let recipe;
+  if (data.data) {
+    console.log('Entered data');
+    recipe = data.data.recipe;
+  } else {
+    recipe = data;
+  }
+  return {
+    id: recipe.id,
+    title: recipe.title,
+    publisher: recipe.sourceName || recipe.publisher,
+    sourceUrl: recipe.sourceUrl || recipe.source_url,
+    image: recipe.image || recipe.image_url,
+    servings: recipe.servings,
+    oldServings: recipe.servings,
+    cookingTime: recipe.readyInMinutes || recipe.cooking_time,
+    ingredients:
+      recipe.ingredients ||
+      recipe.extendedIngredients?.map(ingredient =>
+        reconstructIngredients(ingredient)
+      ),
+    ...(recipe.key && { key: recipe.key }),
+  };
+};
+const findNutrient = function (nutrition, nutrient) {
+  const nutrientObj = nutrition.nutrients.find(nutr => nutr.name === nutrient);
+  return nutrientObj.amount;
+};
 
+const createFullNutrientObject = async function (rec) {
+  const nutrition = await AJAX(
+    `${API_URL_GET}/recipes/${rec.id}/nutritionWidget.json?&apiKey=${KEY_GET}`
+  );
+  return {
+    id: rec.id,
+    title: rec.title,
+    publisher: rec.sourceName,
+    image: rec.image,
+    calories:
+      findNutrient(nutrition, 'Calories') *
+      (rec.servings ? rec.servings / rec.oldServings : 1),
+    proteins:
+      findNutrient(nutrition, 'Protein') *
+      (rec.servings ? rec.servings / rec.oldServings : 1),
+    carbs:
+      findNutrient(nutrition, 'Carbohydrates') *
+      (rec.servings ? rec.servings / rec.oldServings : 1),
+    fats:
+      findNutrient(nutrition, 'Fat') *
+      (rec.servings ? rec.servings / rec.oldServings : 1),
+    weight: `${
+      nutrition.weightPerServing.amount *
+      (rec.servings ? rec.servings / rec.oldServings : 1)
+    }`,
+  };
+};
 export const state = {
   recipe: {},
   search: {
@@ -70,73 +136,30 @@ export const state = {
   },
   day: formatDayTimeStamp(),
 };
-const reconstructIngredients = function (ingredient) {
-  return {
-    id: +ingredient.id,
-    amount: +ingredient.measures.us.amount,
-    unit: ingredient.measures.us.unitLong,
-    name: ingredient.name,
-    text: ingredient.original,
-  };
-};
-const createRecipeObject = function (data) {
-  let recipe;
-  if (data.data) {
-    console.log('Entered data');
-    recipe = data.data.recipe;
-  } else {
-    recipe = data;
+//-------------------------------
+// Defining Media Queries restrictions
+const tabLand = window.matchMedia('(max-width:75em)');
+const phone = window.matchMedia('(max-width: 37.5em)');
+
+if (tabLand.matches) {
+  state.search.resultsPerPage = 2;
+  console.log('tablet land');
+}
+if (phone.matches) {
+  state.search.resultsPerPage = 1;
+  console.log('phone media');
+}
+window.addEventListener('resize', function (e) {
+  console.log(tabLand.matches);
+  if (tabLand.matches) {
+    state.search.resultsPerPage = 2;
   }
-  return {
-    id: recipe.id,
-    title: recipe.title,
-    publisher: recipe.sourceName || recipe.publisher,
-    sourceUrl: recipe.sourceUrl || recipe.source_url,
-    image: recipe.image || recipe.image_url,
-    servings: recipe.servings,
-    oldServings: recipe.servings,
-    cookingTime: recipe.readyInMinutes || recipe.cooking_time,
-    ingredients:
-      recipe.ingredients ||
-      recipe.extendedIngredients?.map(ingredient =>
-        reconstructIngredients(ingredient)
-      ),
-    ...(recipe.key && { key: recipe.key }),
-  };
-};
+  if (phone.matches) state.search.resultsPerPage = 1;
 
-const findNutrient = function (nutrition, nutrient) {
-  const nutrientObj = nutrition.nutrients.find(nutr => nutr.name === nutrient);
-  return nutrientObj.amount;
-};
-const createFullNutrientObject = async function (rec) {
-  const nutrition = await AJAX(
-    `${API_URL_GET}/recipes/${rec.id}/nutritionWidget.json?&apiKey=${KEY_GET}`
-  );
-  return {
-    id: rec.id,
-    title: rec.title,
-    publisher: rec.sourceName,
-    image: rec.image,
-    calories:
-      findNutrient(nutrition, 'Calories') *
-      (rec.servings ? rec.servings / rec.oldServings : 1),
-    proteins:
-      findNutrient(nutrition, 'Protein') *
-      (rec.servings ? rec.servings / rec.oldServings : 1),
-    carbs:
-      findNutrient(nutrition, 'Carbohydrates') *
-      (rec.servings ? rec.servings / rec.oldServings : 1),
-    fats:
-      findNutrient(nutrition, 'Fat') *
-      (rec.servings ? rec.servings / rec.oldServings : 1),
-    weight: `${
-      nutrition.weightPerServing.amount *
-      (rec.servings ? rec.servings / rec.oldServings : 1)
-    }`,
-  };
-};
+  console.log(RES_PER_PAGE);
+});
 
+//-------------------------------
 export const loadRecipe = async function (id) {
   try {
     const data = await Promise.any([
@@ -161,7 +184,7 @@ export const loadSearchResults = async function (query) {
   try {
     state.search.query = query;
     const data = await AJAX(
-      `${API_URL_GET}/recipes/complexSearch?query=${query}&apiKey=${KEY_GET}&number=1`
+      `${API_URL_GET}/recipes/complexSearch?query=${query}&apiKey=${KEY_GET}&number=10`
     );
     const dataUpload = await AJAX(
       `${API_URL_UPLOAD}?search=${query}&key=${KEY_UPLOAD}`
@@ -915,7 +938,6 @@ export const loadStatsGraph = async function (
   days = 7
 ) {
   try {
-    console.log(graphType);
     const dayStart = state.day - (days - 1) * 1000 * 60 * 60 * 24;
     const title = transformTitle(graphType);
     let targetSeries = '';
@@ -983,7 +1005,6 @@ export const loadStatsGraph = async function (
 
     const img = document.querySelector('#img-graph-stats');
     const url = await qc.getUrl();
-    console.log(url);
     img ? await loadImage(img, url) : '';
   } catch (err) {
     throw err;

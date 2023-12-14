@@ -212,7 +212,6 @@ const controlMealTimeRender = function (mealTime) {
 
 const controlAddMeals = async function () {
   model.findMealDaily();
-  console.log(model.state.meals);
   if (model.state.mealDaily.added) {
     addMealsView.render(model.state.mealDaily.meals);
   } else addMealsView.update(model.state.mealDaily.meals);

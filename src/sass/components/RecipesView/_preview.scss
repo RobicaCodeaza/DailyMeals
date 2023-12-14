@@ -12,6 +12,9 @@
       border-radius: 1.2rem;
       border: 2px solid $color-grey-lightest;
       background-color: $color-grey-light-1;
+      @include respond(particular-small-laptop) {
+        padding: 1rem 2rem;
+      }
     }
 
     &:hover {
@@ -75,7 +78,7 @@
 
       &__tags {
         display: flex;
-        // flex-wrap: wrap;
+        flex-wrap: wrap;
         gap: 0.5rem;
 
         .tag {
@@ -104,7 +107,6 @@
   }
 
   &__title {
-    grid-column: 1/-1;
     font-size: 1.6rem;
     color: currentColor;
     text-transform: uppercase;
@@ -115,6 +117,9 @@
     max-width: 25rem;
     white-space: nowrap;
     overflow: hidden;
+    @include respond(particular-small-laptop) {
+      max-width: 25rem;
+    }
   }
 
   .calories {

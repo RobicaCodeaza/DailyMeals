@@ -6,16 +6,14 @@ export default class SidebarView extends View {
   _parentElement = document.querySelector('.current-view');
   _sidebar = document.querySelector('.sidebar__nav');
   _allMenuBtns = Array.from(document.querySelectorAll('.buttonMenu'));
+  _tabPortMedia = window.matchMedia('(max-width: 56.25em)');
   constructor() {
     super();
     this.matchMediaTabPort();
     window.addEventListener('resize', this.matchMediaTabPort.bind(this));
   }
   matchMediaTabPort() {
-    const tabPortMedia = window.matchMedia('(max-width: 56.25em)');
-
-    if (tabPortMedia.matches) {
-      //Hiding sidebar for phone functionality
+    if (this._tabPortMedia.matches) {
       this._sidebar
         .querySelectorAll('.to-be-hidden')
         ?.forEach(el =>
@@ -31,7 +29,6 @@ export default class SidebarView extends View {
       const menuOpen = document.querySelector('.sidebar__nav__btn--open');
       menuOpen.classList.remove('display-none');
     } else {
-      //Sidebar fully visible
       this._sidebar
         .querySelectorAll('.to-be-hidden')
         ?.forEach(el =>
@@ -56,19 +53,19 @@ export default class SidebarView extends View {
             btn.classList.remove('sidebar__nav__btn--active');
           }
         });
-        this.toggleMenuVisibilty();
+        // this.toggleMenuVisibilty();
+
+        if (this._tabPortMedia.matches) this.toggleMenuVisibilty(e);
         handler(btnClicked.id);
       }.bind(this)
     );
   }
-  toggleMenuVisibilty() {
+  toggleMenuVisibilty(e) {
     const elementsMenu = this._sidebar.querySelectorAll('.to-be-hidden');
     elementsMenu.forEach(el => {
       el.classList.toggle('display-none');
       el.classList.toggle('translated-y-100');
       el.classList.toggle('not-visible');
-
-      console.log(el);
     });
 
     this._sidebar.classList.contains('sidebar__nav--active')
@@ -234,7 +231,6 @@ export default class SidebarView extends View {
     </div>
       `;
     } else {
-      console.log('Entered Meals Dashboard');
       return `
       <div class="container container--dashboard">
       <header class="header header--main">

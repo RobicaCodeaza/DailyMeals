@@ -27,7 +27,7 @@
       align-items: center;
       flex-wrap: wrap;
       margin-top: 0;
-      gap: 2rem;
+      gap: 1.2rem;
     }
     @include respond(phone) {
       flex-direction: column;
@@ -105,15 +105,19 @@
     }
 
     @include respond(tab-port) {
-      padding: 1rem 1.5rem;
-      width: 14rem;
+      padding: 1rem 2rem;
+      width: 15rem;
     }
 
     &--open {
       width: 3.5rem;
-      z-index: 2;
+      z-index: 5;
       background-size: 250%;
+      background-color: rgba($color-set2-primary, 0.95);
       margin-right: 2.5rem;
+      svg {
+        fill: $color-set2-primary-light-3;
+      }
       padding: 0.5rem;
       .sidebar__nav__btn__icon {
         margin-right: 0;

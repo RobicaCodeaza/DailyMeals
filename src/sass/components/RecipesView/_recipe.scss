@@ -9,6 +9,17 @@
   flex-direction: column;
   align-items: center;
   background-color: $color-grey-light-1;
+  @include respond(smallest-laptop) {
+    margin-left: 1rem;
+  }
+  @include respond(tab-land) {
+    overflow: visible;
+    margin: 2rem;
+  }
+  @include respond(phone) {
+    margin-left: 0;
+    margin-right: 0;
+  }
   &__header {
     display: flex;
     background-color: $color-grey-light-2;
@@ -100,10 +111,6 @@
     text-transform: uppercase;
     display: flex;
     align-items: center;
-
-    &:not(:last-child) {
-      // margin-right: 4.5rem;
-    }
   }
 
   &__info-icon {
@@ -150,7 +157,11 @@
     padding: 2rem 4rem;
     display: flex;
     height: 60%;
-    align-items: center;
+    @include respond(phone) {
+      flex-direction: column;
+      gap: 2.5rem;
+      height: max-content;
+    }
   }
   ///////////
   // INGREDIENTS
@@ -171,6 +182,12 @@
     flex-direction: column;
     gap: 1.2rem;
     direction: ltr;
+    @include respond(phone) {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2.4rem;
+      grid-auto-flow: row;
+    }
   }
 
   &__ingredient {
@@ -228,6 +245,11 @@
 }
 
 #form-meal-time {
+  @include respond(tab-land) {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+  }
   & select {
     display: inline-block;
     font-family: inherit;
@@ -236,7 +258,7 @@
     color: $color-grey-light-1;
     // height: 100%;
     // max-width: 30%;
-    width: 6vw;
+
     background-image: linear-gradient(to bottom right, #fbdb89, #f48982);
     border: none;
     font-weight: 700;

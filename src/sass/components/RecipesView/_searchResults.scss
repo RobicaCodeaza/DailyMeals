@@ -8,6 +8,16 @@
   background-color: $color-grey-light-2;
   display: flex;
   flex-direction: column;
+  @include respond(smallest-laptop) {
+    margin-right: 1rem;
+  }
+  @include respond(tab-land) {
+    margin: 2rem;
+  }
+  @include respond(phone) {
+    margin-left: 0;
+    margin-right: 0;
+  }
   // align-self: start;
 }
 
@@ -17,6 +27,9 @@
   display: flex;
   flex-direction: column;
   gap: 2.5rem;
+  @include respond(tab-land) {
+    flex-direction: row;
+  }
 }
 
 .pagination {
@@ -43,7 +56,9 @@
   font-size: 1.2rem;
   padding: 0 3.5rem;
   margin-top: 4rem;
-
+  @include respond(tab-land) {
+    margin-top: 2rem;
+  }
   .twitter-link:link,
   .twitter-link:visited {
     color: $color-grey-dark-2;

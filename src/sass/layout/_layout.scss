@@ -15,20 +15,21 @@
   background-color: $color-grey-light-1;
   @include respond(tab-port) {
     position: absolute;
-    // z-index: -1;
     width: auto;
     // height: 50%;
     flex-direction: row;
-
+    background-color: transparent;
     transition: all 0.3s ease-in-out;
     // width: 6rem;
     padding: 1rem;
     // padding: 2rem;
+    z-index: 5;
   }
   &--active {
+    background-color: $color-grey-light-1;
+
     width: 100%;
     transform: translateY(0);
-    z-index: 1;
   }
 }
 .current-view {
@@ -47,11 +48,16 @@
     grid-template-areas:
       'head head'
       'list recipe';
+    overflow-y: scroll;
 
     @media only screen and (max-width: $bp-large) {
       max-width: 100%;
       margin: 0;
       border-radius: 0;
+    }
+    @include respond(tab-land) {
+      display: flex;
+      flex-direction: column;
     }
   }
   &--dashboard {
