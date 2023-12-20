@@ -14,4 +14,5 @@ Main Features of the web application DailyMeals:
 - You can bookmark your meals and preview some nutritional values before adding them to your daily meals
 
 You can see the flowchart below.
+
 ![Flowchart](https://github.com/RobicaCodeaza/DailyMeals/blob/main/DailyMeals-flowchart.png)
