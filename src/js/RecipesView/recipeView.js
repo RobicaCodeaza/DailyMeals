@@ -10,7 +10,7 @@ export default class RecipeView extends View {
   _message = '';
 
   addHandlerRender(handler) {
-    console.log('Entered handler Render');
+    // console.log('Entered handler Render');
     ['hashchange', 'load', 'popstate'].forEach(e =>
       window.addEventListener(e, function (e) {
         handler();

@@ -46,7 +46,6 @@ export default class View {
           !curEl.isEqualNode(newEl) &&
           newEl.firstChild?.nodeValue.trim() !== ''
         ) {
-          console.log(curEl);
           curEl.textContent = newEl.textContent;
         }
         // Update changed attribute

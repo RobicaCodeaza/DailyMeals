@@ -47,13 +47,11 @@ export default class SidebarView extends View {
       function (e) {
         if (!e.target.closest('.buttonMenu')) return;
         const btnClicked = e.target.closest('.buttonMenu');
-        btnClicked.classList.add('sidebar__nav__btn--active');
-        this._allMenuBtns.forEach(btn => {
-          if (btn !== btnClicked) {
-            btn.classList.remove('sidebar__nav__btn--active');
-          }
-        });
-        // this.toggleMenuVisibilty();
+        this.activateButton(
+          btnClicked,
+          'buttonMenu',
+          'sidebar__nav__btn--active'
+        );
 
         if (this._tabPortMedia.matches) this.toggleMenuVisibilty(e);
         handler(btnClicked.id);
@@ -234,7 +232,7 @@ export default class SidebarView extends View {
       return `
       <div class="container container--dashboard">
       <header class="header header--main">
-        <div class="header--main__date">22.11.2023</div>
+        <div class="header--main__date">${new Date().getDate()}/${new Date().getMonth()}/${new Date().getFullYear()}</div>
         <div class="header--main__welcome">
           Welcome back, Stoica Robert!
         </div>

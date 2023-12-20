@@ -1,7 +1,6 @@
 'use strict';
 import { async } from 'regenerator-runtime'; // fOR PROMISE POLYFILLING
 // import * as QuickChart from '../../node_modules/quickchart-js';
-const qc = new QuickChart();
 
 import {
   RES_PER_PAGE,
@@ -10,11 +9,14 @@ import {
   API_URL_GET,
   API_URL_UPLOAD,
   KEY_UPLOAD,
+  DAYS_STATS_GRAPH,
 } from './config';
 
 import { AJAX } from './helpers';
 
 import dayjs from 'dayjs';
+
+const qc = new QuickChart();
 
 const formatDayTimeStamp = function (date) {
   if (date) {
@@ -143,20 +145,15 @@ const phone = window.matchMedia('(max-width: 37.5em)');
 
 if (tabLand.matches) {
   state.search.resultsPerPage = 2;
-  console.log('tablet land');
 }
 if (phone.matches) {
   state.search.resultsPerPage = 1;
-  console.log('phone media');
 }
 window.addEventListener('resize', function (e) {
-  console.log(tabLand.matches);
   if (tabLand.matches) {
     state.search.resultsPerPage = 2;
   }
   if (phone.matches) state.search.resultsPerPage = 1;
-
-  console.log(RES_PER_PAGE);
 });
 
 //-------------------------------
@@ -174,7 +171,7 @@ export const loadRecipe = async function (id) {
     state.mealTime && (state.recipe.mealTime = state.mealTime);
   } catch (err) {
     // Temporary error handling
-    console.log(`${err} `);
+    // console.log(`${err} `);
     // ERROR HANDLING
     throw err;
   }
@@ -350,8 +347,6 @@ export const setDay = function (day) {
   state.day = +new Date(day);
 };
 
-export const loadCalendar = function (element) {};
-
 export const mealTimeSet = function (mealTime = '') {
   state.mealTime = mealTime;
 };
@@ -466,7 +461,7 @@ export const calcMealDailyStats = function () {
 
   // Deleting from state too
   if (indexMealDaily >= 0) {
-    console.log('calc Meal Daily STATS');
+    // console.log('calc Meal Daily STATS');
     state.meals.splice(indexMealDaily, 1);
     state.meals.push(state.mealDaily);
     persistMeals();
@@ -935,7 +930,7 @@ function sortDesc(a, b) {
 export const loadStatsGraph = async function (
   graphType = 'totalCalories',
   color,
-  days = 7
+  days = DAYS_STATS_GRAPH
 ) {
   try {
     const dayStart = state.day - (days - 1) * 1000 * 60 * 60 * 24;

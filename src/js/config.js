@@ -9,3 +9,4 @@ export function setRES_PER_PAGE(value) {
 export const KEY_GET = '0de55fe0e2394c28a37a02153efeab05';
 export const KEY_UPLOAD = 'f246a997-42d0-4c72-8be0-d6d110033d0b';
 export const MODAL_CLOSE_SEC = 2.5;
+export const DAYS_STATS_GRAPH = 7;
