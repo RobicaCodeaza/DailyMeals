@@ -232,7 +232,9 @@ export default class SidebarView extends View {
       return `
       <div class="container container--dashboard">
       <header class="header header--main">
-        <div class="header--main__date">${new Date().getDate()}/${new Date().getMonth()}/${new Date().getFullYear()}</div>
+        <div class="header--main__date">${new Date().getDate()}/${
+        new Date().getMonth() + 1
+      }/${new Date().getFullYear()}</div>
         <div class="header--main__welcome">
           Welcome back, Stoica Robert!
         </div>

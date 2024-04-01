@@ -62,13 +62,15 @@ class AddMealsView extends View {
                         return `
                   <tr>
                     <td>${meal.title}</td>
-                    <td>${meal.weight}g</td>
-                    <td>${meal.calories}kcal</td>
-                    <td>${meal.proteins}g</td>
-                    <td>${meal.carbs}g</td>
-                    <td>${meal.fats}g</td>
+                    <td>${Math.round(Number(meal.weight))}g</td>
+                    <td>${Math.round(Number(meal.calories))}kcal</td>
+                    <td>${Math.round(Number(meal.proteins))}g</td>
+                    <td>${Math.round(Number(meal.carbs))}g</td>
+                    <td>${Math.round(Number(meal.fats))}g</td>
                     <td>
-                      <button class="btn--delete" id="${meal.id}" data-mealtime = "${meal.mealTime}">
+                      <button class="btn--delete" id="${
+                        meal.id
+                      }" data-mealtime = "${meal.mealTime}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#000000" viewBox="0 0 256 256"><path d="M216,48H176V40a24,24,0,0,0-24-24H104A24,24,0,0,0,80,40v8H40a8,8,0,0,0,0,16h8V208a16,16,0,0,0,16,16H192a16,16,0,0,0,16-16V64h8a8,8,0,0,0,0-16ZM96,40a8,8,0,0,1,8-8h48a8,8,0,0,1,8,8v8H96Zm96,168H64V64H192ZM112,104v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Zm48,0v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Z"></path></svg>
                       </button>
                     </td>
@@ -109,13 +111,15 @@ class AddMealsView extends View {
                         return `
                   <tr>
                     <td>${meal.title}</td>
-                    <td>${meal.weight}g</td>
-                    <td>${meal.calories}kcal</td>
-                    <td>${meal.proteins}g</td>
-                    <td>${meal.carbs}g</td>
-                    <td>${meal.fats}g</td>
+                    <td>${Math.round(Number(meal.weight))}g</td>
+                    <td>${Math.round(Number(meal.calories))}kcal</td>
+                    <td>${Math.round(Number(meal.proteins))}g</td>
+                    <td>${Math.round(Number(meal.carbs))}g</td>
+                    <td>${Math.round(Number(meal.fats))}g</td>
                     <td>
-                      <button class="btn--delete" id="${meal.id}" data-mealtime = "${meal.mealTime}">
+                      <button class="btn--delete" id="${
+                        meal.id
+                      }" data-mealtime = "${meal.mealTime}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#000000" viewBox="0 0 256 256"><path d="M216,48H176V40a24,24,0,0,0-24-24H104A24,24,0,0,0,80,40v8H40a8,8,0,0,0,0,16h8V208a16,16,0,0,0,16,16H192a16,16,0,0,0,16-16V64h8a8,8,0,0,0,0-16ZM96,40a8,8,0,0,1,8-8h48a8,8,0,0,1,8,8v8H96Zm96,168H64V64H192ZM112,104v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Zm48,0v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Z"></path></svg>
                       </button>
                     </td>
@@ -157,13 +161,15 @@ class AddMealsView extends View {
                         return `
                   <tr>
                     <td>${meal.title}</td>
-                    <td>${meal.weight}g</td>
-                    <td>${meal.calories}kcal</td>
-                    <td>${meal.proteins}g</td>
-                    <td>${meal.carbs}g</td>
-                    <td>${meal.fats}g</td>
+                    <td>${Math.round(Number(meal.weight))}g</td>
+                    <td>${Math.round(Number(meal.calories))}kcal</td>
+                    <td>${Math.round(Number(meal.proteins))}g</td>
+                    <td>${Math.round(Number(meal.carbs))}g</td>
+                    <td>${Math.round(Number(meal.fats))}g</td>
                     <td>
-                      <button class="btn--delete" id="${meal.id}" data-mealtime = "${meal.mealTime}">
+                      <button class="btn--delete" id="${
+                        meal.id
+                      }" data-mealtime = "${meal.mealTime}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#000000" viewBox="0 0 256 256"><path d="M216,48H176V40a24,24,0,0,0-24-24H104A24,24,0,0,0,80,40v8H40a8,8,0,0,0,0,16h8V208a16,16,0,0,0,16,16H192a16,16,0,0,0,16-16V64h8a8,8,0,0,0,0-16ZM96,40a8,8,0,0,1,8-8h48a8,8,0,0,1,8,8v8H96Zm96,168H64V64H192ZM112,104v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Zm48,0v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Z"></path></svg>
                       </button>
                     </td>

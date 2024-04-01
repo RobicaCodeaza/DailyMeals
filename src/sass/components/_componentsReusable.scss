@@ -241,11 +241,22 @@
   @include respond(tab-port) {
     padding: 0.5rem 8rem;
   }
+  @include respond(phone) {
+    padding: 1rem 2rem 1rem 6rem;
+  }
+
   &__date {
     font-size: 1.8rem;
+    @include respond(phone) {
+      display: none;
+    }
   }
   &__welcome {
     font-size: 2rem;
+    @include respond(phone) {
+      margin-left: auto;
+      margin-right: auto;
+    }
   }
   &__user {
     cursor: pointer;

@@ -18,8 +18,8 @@
     gap: 2.4rem;
     overflow-y: scroll;
     direction: rtl;
-    max-height: 22.5rem;
-
+    // max-height: 22.5rem;
+    // height: 15rem;
     grid-template-columns: repeat(2, minmax(15rem, 20rem));
     grid-template-rows: repeat(auto-fit, min-content);
   }
@@ -31,12 +31,16 @@
     grid-column: 1 / span 2;
     grid-row: 4/5;
     display: flex;
-    overflow-y: visible;
+    // overflow-y: visible;
     direction: ltr;
     flex-wrap: wrap;
     justify-content: space-around;
     // height: 25rem;
     max-height: max-content;
+  }
+  @include respond(phone) {
+    // height: 45rem;
+    gap: 1.2rem;
   }
   &__stat {
     direction: ltr;
@@ -119,8 +123,13 @@
       }
     }
     @include respond(tab-land) {
-      width: 18.5rem;
+      width: auto;
       height: auto;
+    }
+    @include respond(tab-port) {
+      // width: auto;
+      gap: 0.6rem;
+      width: 15rem;
     }
   }
 }

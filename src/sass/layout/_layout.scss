@@ -25,9 +25,14 @@
     // padding: 2rem;
     z-index: 5;
   }
+  @include respond(phone) {
+  }
   &--active {
-    background-color: $color-grey-light-1;
+    // padding: 2rem;
 
+    background-color: $color-grey-light-1;
+    border-bottom: 2px solid $color-grey-light-3;
+    border-radius: 5rem;
     width: 100%;
     transform: translateY(0);
   }
@@ -79,6 +84,8 @@
       @include respond(smallest-laptop) {
         gap: 2.4rem;
         padding: 2rem;
+        grid-template-rows: 1fr min-content min-content min-content;
+        grid-auto-flow-row: min-content;
       }
       @include respond(tab-land) {
         gap: 3.2rem;

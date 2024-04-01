@@ -20,6 +20,7 @@
     "core-js": "^3.32.2",
     "datedreamer": "^0.3.4",
     "dayjs": "^1.11.10",
+    "fractional": "^1.0.0",
     "fracty": "^1.0.11",
     "quickchart-js": "^3.1.3",
     "regenerator-runtime": "^0.14.0"

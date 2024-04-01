@@ -69,7 +69,7 @@
     height: 100%;
     @include respond(phone) {
       display: flex;
-      flex-direction: column;
+      // flex-direction: column;
     }
   }
 
@@ -101,6 +101,11 @@
       fill: $color-primary;
       margin-right: 0.7rem;
       transform: translateY(-1px);
+    }
+    span {
+      @include respond(phone) {
+        display: none;
+      }
     }
 
     &:focus {

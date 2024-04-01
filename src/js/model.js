@@ -364,7 +364,7 @@ export const findMealDaily = function () {
 
 export const addMeal = async function () {
   try {
-    console.log('Entered Added');
+    // console.log('Entered Added');
     const fullNutrientRecipe = await createFullNutrientObject(state.recipe);
     fullNutrientRecipe.mealTime = state.mealTime;
     if (!state.mealDaily.added) {
