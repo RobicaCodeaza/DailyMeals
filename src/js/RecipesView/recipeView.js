@@ -1,6 +1,7 @@
 // import icons from '../img/icons.svg'; //Parcel 1
 import icons from 'url:../../img/icons.svg'; //Parcel 2
 import { Fraction } from 'fractional';
+import fracty from '../../../node_modules/fracty';
 import View from '../views/View';
 
 export default class RecipeView extends View {
@@ -155,10 +156,9 @@ export default class RecipeView extends View {
           </svg>
           <div class="recipe__quantity">${
             ing.amount
-              ? // ? new Fraction(ing.amount).toString()
-                new Fraction(Number(ing.amount).toFixed(1)).toString()
+              ? fracty(Number(ing.amount).toFixed(1))
               : ing.quantity
-              ? new Fraction(Number(ing.quantity).toFixed(1)).toString()
+              ? fracty(Number(ing.quantity).toFixed(1))
               : ''
           }</div>
           <div class="recipe__description">
