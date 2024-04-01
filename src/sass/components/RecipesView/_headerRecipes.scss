@@ -2,7 +2,7 @@
 .header--recipes {
   padding: 1rem 3rem;
   @include respond(phone) {
-    padding: 1rem 0rem 1rem 8rem;
+    padding: 1rem 0rem 1rem 5rem;
     width: 100%;
     gap: 1.2rem;
   }
@@ -19,6 +19,7 @@
 
   @include respond(phone) {
     margin-right: auto;
+    padding-left: 2rem;
   }
   &:focus-within {
     transform: translateY(-2px);

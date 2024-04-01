@@ -12,6 +12,11 @@
   box-shadow: 0 4rem 6rem rgba(0, 0, 0, 0.25);
   z-index: 1000;
   transition: all 0.5s;
+  @include respond(tab-port) {
+    width: 90dvw;
+    height: 90dvh;
+    overflow-y: scroll;
+  }
 
   .btn--close-modal {
     font-family: inherit;
@@ -48,12 +53,26 @@
   grid-template-columns: 1fr 1fr;
   gap: 4rem 6rem;
 
+  @include respond(phone) {
+    gap: 2rem 2rem;
+    display: flex;
+    flex-direction: column;
+    // overflow: scroll;
+  }
+
   &__column {
     display: grid;
     grid-template-columns: 1fr 2.8fr;
     align-items: center;
     gap: 1.5rem;
 
+    @include respond(tab-port) {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      // grid-template-columns: 1fr 1fr;
+      // gap: 2.4rem;
+    }
     & label {
       font-size: 1.5rem;
       font-weight: 600;
